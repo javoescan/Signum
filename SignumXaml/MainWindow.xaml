@@ -1,0 +1,31 @@
+﻿<Window x:Class="SignumXaml.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SignumXaml"
+        mc:Ignorable="d"
+        Title="Kinect 2 hand tracking" Height="800" Width="1200" Loaded="Window_Loaded" Closed="Window_Closed">
+    <Grid>
+        <Viewbox>
+            <Grid Width="1920" Height="1080">
+                <Image Name="camera" />
+                <Canvas Name="canvas">
+
+
+                </Canvas>
+            </Grid>
+        </Viewbox>
+        <Canvas HorizontalAlignment="Left" Height="240" VerticalAlignment="Top" Width="1192" Margin="0,529,0,0"/>
+        <Canvas>
+            <TextBlock Name="xPositionR" Text="x" FontSize="48"/>
+            <TextBlock Name="yPositionR" Text="y" FontSize="48" Canvas.Top="34"/>
+            <TextBlock Name="xPositionL" Text="x" FontSize="48" Canvas.Top="103"/>
+            <TextBlock Name="yPositionL" Text="y" FontSize="48" Canvas.Top="143"/>
+            <TextBlock Name="tblRightHandState" Text="derecha" Canvas.Left="958" Canvas.Top="143" FontSize="48"/>
+            <TextBlock Name="tblLeftHandState" Text="Izquierda" Canvas.Left="958" Canvas.Top="244" FontSize="48"/>
+            <TextBlock Name="tblPosicionMano" Text="Posicion" Canvas.Left="958" Canvas.Top="334" FontSize="48"/>
+        </Canvas>
+    </Grid>
+
+</Window>
