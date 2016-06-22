@@ -15,5 +15,4 @@ FIN:
 draw skeleton
 que baje la mano y reconocer distancia
 
-
-tamaño del cuepro arreglar con felo
+considerar un Z cerac y uno lejos para los calculos de margen de cada punto
