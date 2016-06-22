@@ -25,6 +25,7 @@
             <TextBlock Name="tblRightHandState" Text="derecha" Canvas.Left="958" Canvas.Top="143" FontSize="48"/>
             <TextBlock Name="tblLeftHandState" Text="Izquierda" Canvas.Left="958" Canvas.Top="244" FontSize="48"/>
             <TextBlock Name="tblPosicionMano" Text="Posicion" Canvas.Left="958" Canvas.Top="334" FontSize="48"/>
+            <TextBlock Name="tblEstado" Text="Estado" Canvas.Left="958" Canvas.Top="394" FontSize="48"/>
         </Canvas>
     </Grid>
 

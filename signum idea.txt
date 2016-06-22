@@ -1,0 +1,19 @@
+INICIO:
+*Lugar de mano en relacion al cuerpo
+*Estado de la mano
+
+Proceso:
+Si sube o baja (y cuanto)
+
+FIN:
+*Lugar de la mano en relacion al cuerpo
+*Estado de la mano
+
+
+-PUNTOS DE COMIENZO
+
+draw skeleton
+que baje la mano y reconocer distancia
+
+
+tamaño del cuepro arreglar con felo

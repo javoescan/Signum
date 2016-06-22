@@ -25,7 +25,8 @@ namespace SignumXaml
         KinectSensor _sensor;
         MultiSourceFrameReader _reader;
         IList<Body> _bodies;
-
+        int estado=0;
+        string inicio = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -70,6 +71,8 @@ namespace SignumXaml
                 }
             }
 
+
+
             // Body
             using (var frame = reference.BodyFrameReference.AcquireFrame())
             {
@@ -96,20 +99,54 @@ namespace SignumXaml
 
                                 Joint head = body.Joints[JointType.Head];
 
+                                Joint panza = body.Joints[JointType.SpineMid]; 
+
                                 // Draw hands and thumbs
                                 canvas.DrawHand(handRight, _sensor.CoordinateMapper);
                                 canvas.DrawHand(handLeft, _sensor.CoordinateMapper);
                                 canvas.DrawThumb(thumbRight, _sensor.CoordinateMapper);
                                 canvas.DrawThumb(thumbLeft, _sensor.CoordinateMapper);
                                 canvas.DrawPoint(head, _sensor.CoordinateMapper);
+                                canvas.DrawPoint(panza, _sensor.CoordinateMapper);
 
-                                if (Math.Abs((head.Position.Y * 100) - (handRight.Position.Y * 100)) < 10 && Math.Abs((head.Position.X * 100) - (handRight.Position.X * 100)) < 10)
+
+                                //PRUEBA IF
+                                tblEstado.Text = estado.ToString();
+                                if (estado==0)
                                 {
-                                    tblPosicionMano.Text = "Cabeza";
-                                }
-                                else {
+                                if (Math.Abs((head.Position.Y * 100 - 20) - (handRight.Position.Y * 100)) < 10 && Math.Abs((head.Position.X * 100) - (handRight.Position.X * 100)) < 10)
+                                {
+                                    tblPosicionMano.Text = "Pera MD";
+                                        estado = 1;
+                                        inicio = "peramd";
+                                }else if (Math.Abs((head.Position.Y * 100 - 20) - (handLeft.Position.Y * 100)) < 10 && Math.Abs((head.Position.X * 100) - (handLeft.Position.X * 100)) < 10)
+                                {
+                                    tblPosicionMano.Text = "Pera MI";
+                                        estado = 1;
+                                        inicio = "perami";
+                                    }
+                                else
+                                {
                                     tblPosicionMano.Text = "Nada";
                                 }
+                                }
+                                if (estado==1)
+                                {
+                                    if (inicio == "peramd" && (Math.Abs((panza.Position.Y * 100) - (handRight.Position.Y * 100)) < 10) && (Math.Abs((panza.Position.X * 100) - (handRight.Position.X * 100)) < 10))
+                                    {
+                                        tblPosicionMano.Text = "Hola derecho";
+                                        MessageBox.Show("Hola derecho");
+                                        estado = 0;
+                                        inicio = "";
+                                    }
+                                    else if (inicio == "perami" && (Math.Abs((panza.Position.Y * 100) - (handLeft.Position.Y * 100)) < 10) && (Math.Abs((panza.Position.X * 100) - (handLeft.Position.X * 100)) < 10))
+                                    {
+                                        MessageBox.Show("Hola izquierdo");
+                                        estado = 0;
+                                        inicio = "";
+                                    }
+                                }
+                                //
 
                                 xPositionR.Text = "RX: " + (handRight.Position.X*100).ToString();
                                 yPositionR.Text = "RY: " + (handRight.Position.Y*100).ToString();
@@ -165,6 +202,12 @@ namespace SignumXaml
                                 tblRightHandState.Text = rightHandState;
                                 tblLeftHandState.Text = leftHandState;
                             }
+                            
+                        }
+                        else
+                        {
+                            estado = 0;
+                            inicio = "";
                         }
                     }
                 }
