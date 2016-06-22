@@ -27,6 +27,8 @@ namespace SignumXaml
         IList<Body> _bodies;
         int estado=0;
         string inicio = "";
+        //Rectangle myRgbRectangle = new Rectangle();
+        //SolidColorBrush mySolidColorBrush = new SolidColorBrush();
         public MainWindow()
         {
             InitializeComponent();
@@ -110,6 +112,9 @@ namespace SignumXaml
                                 canvas.DrawPoint(panza, _sensor.CoordinateMapper);
 
 
+                                //pera.Children.Add(myRgbRectangle);
+                                //Canvas.SetTop(myRgbRectangle, 0);
+                                //Canvas.SetLeft(myRgbRectangle, 0);
                                 //PRUEBA IF
                                 tblEstado.Text = estado.ToString();
                                 if (estado==0)
