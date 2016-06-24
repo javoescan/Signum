@@ -21,12 +21,14 @@ namespace SignumXaml
     /// </summary>
     public partial class MainWindow : Window
     {
-
+        Ellipse e1;
         KinectSensor _sensor;
         MultiSourceFrameReader _reader;
         IList<Body> _bodies;
         int estado=0;
         string inicio = "";
+
+        double ElipseMedida = 0;
         //Rectangle myRgbRectangle = new Rectangle();
         //SolidColorBrush mySolidColorBrush = new SolidColorBrush();
         public MainWindow()
@@ -36,6 +38,10 @@ namespace SignumXaml
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            //PRUEBA
+            arriba.Children.Add(Sectores.CreateEllipse(100, 100, 100, 100));
+            //PRUEBA FIN
+
             _sensor = KinectSensor.GetDefault();
 
             if (_sensor != null)
@@ -100,8 +106,11 @@ namespace SignumXaml
                                 Joint thumbLeft = body.Joints[JointType.ThumbLeft];
 
                                 Joint head = body.Joints[JointType.Head];
+                                Joint neck = body.Joints[JointType.Neck];
+                                Joint panza = body.Joints[JointType.SpineMid];
+                                
 
-                                Joint panza = body.Joints[JointType.SpineMid]; 
+
 
                                 // Draw hands and thumbs
                                 canvas.DrawHand(handRight, _sensor.CoordinateMapper);
@@ -111,6 +120,10 @@ namespace SignumXaml
                                 canvas.DrawPoint(head, _sensor.CoordinateMapper);
                                 canvas.DrawPoint(panza, _sensor.CoordinateMapper);
 
+                                tblResta.Text = ((head.Position.Y * 100 - 20) - (handRight.Position.Y * 100)).ToString();
+                                tblz.Text = panza.Position.Z.ToString();
+                                ElipseMedida = (Math.Abs((head.Position.Y * 100) - (neck.Position.Y)));
+                                arriba.Children.Add(Sectores.CreateEllipse(100, 100, 25, 25));
 
                                 //pera.Children.Add(myRgbRectangle);
                                 //Canvas.SetTop(myRgbRectangle, 0);
