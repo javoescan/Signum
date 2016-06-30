@@ -28,9 +28,10 @@ namespace SignumXaml
         int estado=0;
         string inicio = "";
 
+        List<int> SectoresRecorridosD = new List<int>();
+        List<int> SectoresRecorridosI = new List<int>();
+
         double ElipseMedida = 0;
-        //Rectangle myRgbRectangle = new Rectangle();
-        //SolidColorBrush mySolidColorBrush = new SolidColorBrush();
         public MainWindow()
         {
             InitializeComponent();
@@ -38,9 +39,7 @@ namespace SignumXaml
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            //PRUEBA
-            arriba.Children.Add(Sectores.CreateEllipse(100, 100, 100, 100));
-            //PRUEBA FIN
+            
 
             _sensor = KinectSensor.GetDefault();
 
@@ -94,7 +93,7 @@ namespace SignumXaml
 
                     foreach (var body in _bodies)
                     {
-                        if (body != null)
+                    if (body != null)
                         {
                             if (body.IsTracked)
                             {
@@ -108,63 +107,114 @@ namespace SignumXaml
                                 Joint head = body.Joints[JointType.Head];
                                 Joint neck = body.Joints[JointType.Neck];
                                 Joint panza = body.Joints[JointType.SpineMid];
-                                
-
+                                Joint hombroD = body.Joints[JointType.ShoulderRight];
+                                Joint hombroI = body.Joints[JointType.ShoulderLeft];
+                                Joint espinahombro = body.Joints[JointType.SpineShoulder];
+                                Joint cadera = body.Joints[JointType.SpineBase];
 
 
                                 // Draw hands and thumbs
-                                canvas.DrawHand(handRight, _sensor.CoordinateMapper);
-                                canvas.DrawHand(handLeft, _sensor.CoordinateMapper);
-                                canvas.DrawThumb(thumbRight, _sensor.CoordinateMapper);
-                                canvas.DrawThumb(thumbLeft, _sensor.CoordinateMapper);
-                                canvas.DrawPoint(head, _sensor.CoordinateMapper);
-                                canvas.DrawPoint(panza, _sensor.CoordinateMapper);
+                                //canvas.DrawHand(handRight, _sensor.CoordinateMapper);
+                                // canvas.DrawHand(handLeft, _sensor.CoordinateMapper);
+                                // canvas.DrawThumb(thumbRight, _sensor.CoordinateMapper);
+                                // canvas.DrawThumb(thumbLeft, _sensor.CoordinateMapper);
+                                // canvas.DrawPoint(head, _sensor.CoordinateMapper);
+                                // canvas.DrawPoint(panza, _sensor.CoordinateMapper);
+
+                                Rectangle RectManoDerecha = canvas.DibujarSector(handRight, handRight, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 100) / head.Position.Z));
+                                Rectangle RectManoIzquierda = canvas.DibujarSector(handLeft, handLeft, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 100) / head.Position.Z));
+
+                               // canvas.DrawSkeleton(body, _sensor.CoordinateMapper);
+
+                                //Sector 1
+
+                               Rectangle Sector1 = canvas.DibujarSector(head, hombroD, _sensor.CoordinateMapper, Math.Abs(head.Position.Y-neck.Position.Y)* ((2  * 500 )/ head.Position.Z));
+
+                                //Sector 2
+                                Rectangle Sector2 = canvas.DibujarSector(head, hombroI, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+
+                                //Sector 3
+                                Rectangle Sector3 = canvas.DibujarSector(neck, neck, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 200) / head.Position.Z),80/ head.Position.Z);
+
+                                //Sector 4
+                                Rectangle Sector4 = canvas.DibujarSector(hombroD, hombroD, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+
+                                //Sector 5
+                                Rectangle Sector5 = canvas.DibujarSector(espinahombro, espinahombro, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+
+                                //Sector 6
+                                Rectangle Sector6 = canvas.DibujarSector(hombroI, hombroI, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+
+                                //Sector 7
+                                Rectangle Sector7 = canvas.DibujarSector(panza, hombroD, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+
+                                //Sector 8
+                                Rectangle Sector8 = canvas.DibujarSector(panza, panza, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+
+                                //Sector 9
+                                Rectangle Sector9 = canvas.DibujarSector(panza, hombroI, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+
+                                //Sector 10
+                                Rectangle Sector10 = canvas.DibujarSector(cadera, cadera, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+
+                                Rectangle[] SectoresRecs = new Rectangle[10] {Sector1,Sector2, Sector3, Sector4, Sector5, Sector6, Sector7, Sector8, Sector9, Sector10 };
 
                                 tblResta.Text = ((head.Position.Y * 100 - 20) - (handRight.Position.Y * 100)).ToString();
                                 tblz.Text = panza.Position.Z.ToString();
-                                ElipseMedida = (Math.Abs((head.Position.Y * 100) - (neck.Position.Y)));
-                                arriba.Children.Add(Sectores.CreateEllipse(100, 100, 25, 25));
 
-                                //pera.Children.Add(myRgbRectangle);
-                                //Canvas.SetTop(myRgbRectangle, 0);
-                                //Canvas.SetLeft(myRgbRectangle, 0);
-                                //PRUEBA IF
-                                tblEstado.Text = estado.ToString();
-                                if (estado==0)
+                                int SectorMD = Sectores.Intersecta(RectManoDerecha, SectoresRecs);
+                                int SectorMI = Sectores.Intersecta(RectManoIzquierda, SectoresRecs);
+
+                                if (SectorMD != -1 && SectorMD != 10)
                                 {
-                                if (Math.Abs((head.Position.Y * 100 - 20) - (handRight.Position.Y * 100)) < 10 && Math.Abs((head.Position.X * 100) - (handRight.Position.X * 100)) < 10)
+                                    tblsenaD.Text = "Mano Derecha en sector " + SectorMD.ToString();
+                                    SectoresRecorridosD.Add(SectorMD);
+                                }
+                                else if(SectorMD == 10)
                                 {
-                                    tblPosicionMano.Text = "Pera MD";
-                                        estado = 1;
-                                        inicio = "peramd";
-                                }else if (Math.Abs((head.Position.Y * 100 - 20) - (handLeft.Position.Y * 100)) < 10 && Math.Abs((head.Position.X * 100) - (handLeft.Position.X * 100)) < 10)
-                                {
-                                    tblPosicionMano.Text = "Pera MI";
-                                        estado = 1;
-                                        inicio = "perami";
+                                    String ahora = "";
+                                    int numo = -1;
+                                    foreach (int num in SectoresRecorridosD)
+                                    {
+                                        if (numo != num)
+                                        {
+                                            ahora += num.ToString() + ",";
+                                            numo = num;
+                                        }
                                     }
+
+                                    MessageBox.Show(ahora);
+                                }
                                 else
                                 {
-                                    tblPosicionMano.Text = "Nada";
+                                    tblsenaD.Text = "Nada";
                                 }
-                                }
-                                if (estado==1)
+
+                                if (SectorMI != -1 && SectorMI != 10)
                                 {
-                                    if (inicio == "peramd" && (Math.Abs((panza.Position.Y * 100) - (handRight.Position.Y * 100)) < 10) && (Math.Abs((panza.Position.X * 100) - (handRight.Position.X * 100)) < 10))
-                                    {
-                                        tblPosicionMano.Text = "Hola derecho";
-                                        MessageBox.Show("Hola derecho");
-                                        estado = 0;
-                                        inicio = "";
-                                    }
-                                    else if (inicio == "perami" && (Math.Abs((panza.Position.Y * 100) - (handLeft.Position.Y * 100)) < 10) && (Math.Abs((panza.Position.X * 100) - (handLeft.Position.X * 100)) < 10))
-                                    {
-                                        MessageBox.Show("Hola izquierdo");
-                                        estado = 0;
-                                        inicio = "";
-                                    }
+                                    tblsenaI.Text = "Mano Izquierda en sector " + SectorMI.ToString();
+                                    SectoresRecorridosI.Add(SectorMI);
                                 }
-                                //
+                                else if(SectorMI == 10)
+                                {
+                                    String ahora = "";
+                                    int numo = -1;
+                                    foreach (int num in SectoresRecorridosI)
+                                    {
+                                        if (numo != num) { 
+                                        ahora += num.ToString() + ",";
+                                            numo = num;
+                                        }
+                                    }
+
+                                    MessageBox.Show(ahora);
+                                }
+                                else
+                                {
+                                    tblsenaI.Text = "Nada";
+                                }
+
+                                
 
                                 xPositionR.Text = "RX: " + (handRight.Position.X*100).ToString();
                                 yPositionR.Text = "RY: " + (handRight.Position.Y*100).ToString();

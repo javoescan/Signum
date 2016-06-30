@@ -28,6 +28,8 @@
             <TextBlock Name="tblEstado" Text="Estado" Canvas.Left="958" Canvas.Top="400" FontSize="48"/>
             <TextBlock Name="tblResta" Text="Relativo" Canvas.Left="958" Canvas.Top="466" FontSize="48"/>
             <TextBlock Name="tblz" Text="z" Canvas.Left="958" Canvas.Top="535" FontSize="48"/>
+            <TextBlock Name="tblsenaD" Text="Nada" FontSize="48" Canvas.Top="631" Canvas.Left="508"/>
+            <TextBlock Name="tblsenaI" Text="Nada" FontSize="48" Canvas.Top="695" Canvas.Left="508"/>
             <Canvas Name="pera">
             </Canvas>
         </Canvas>

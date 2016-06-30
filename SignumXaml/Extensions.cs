@@ -174,6 +174,8 @@ namespace SignumXaml
             canvas.Children.Add(ellipse);
         }
 
+        
+
         public static void DrawHand(this Canvas canvas, Joint hand, CoordinateMapper mapper)
         {
             if (hand.TrackingState == TrackingState.NotTracked) return;
