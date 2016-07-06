@@ -65,6 +65,27 @@ namespace SignumXaml
             }
         }
 
+        Dictionary<string, string> diccionario = new Dictionary<string, string>()
+    {
+        { "abe", "Te quiero"},
+        { "ed", "Chau!"},
+        {"ada","Hola!" },
+        {"ghihg","Tengo hambre" }
+    };
+
+        int temp2 = 0;
+        bool BuscarSeñas(string text) {
+            string[] keywords = {"abe", "ada", "ghihg","ed"};
+
+            List<Coincidencia> states = Analisis.FindAllStates(text, keywords);
+            if (states!=null && states.Count>0)
+            {
+                tblsena.Text = diccionario[states[0].key];
+                temp2 = 80;
+                return true;
+            }
+            return false;
+        }
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
             var reference = e.FrameReference.AcquireFrame();
@@ -79,7 +100,10 @@ namespace SignumXaml
             }
 
 
-
+            String temp = "";
+            
+            string[] arr1 = new string[] { "", "a", "b","c", "d", "e", "f", "g", "h", "i" };
+            int numo;
             // Body
             using (var frame = reference.BodyFrameReference.AcquireFrame())
             {
@@ -90,11 +114,11 @@ namespace SignumXaml
                     _bodies = new Body[frame.BodyFrameSource.BodyCount];
 
                     frame.GetAndRefreshBodyData(_bodies);
-
                     foreach (var body in _bodies)
                     {
                     if (body != null)
                         {
+
                             if (body.IsTracked)
                             {
                                 // Find the joints
@@ -170,7 +194,8 @@ namespace SignumXaml
                                     tblsenaD.Text = "Mano Derecha en sector " + SectorMD.ToString();
                                     SectoresRecorridosD.Add(SectorMD);
                                 }
-                                else if(SectorMD == 10)
+                                
+                               /* else if(SectorMD == 10)
                                 {
                                     String ahora = "";
                                     int numo = -1;
@@ -184,7 +209,7 @@ namespace SignumXaml
                                     }
 
                                     MessageBox.Show(ahora);
-                                }
+                                }*/
                                 else
                                 {
                                     tblsenaD.Text = "Nada";
@@ -195,7 +220,7 @@ namespace SignumXaml
                                     tblsenaI.Text = "Mano Izquierda en sector " + SectorMI.ToString();
                                     SectoresRecorridosI.Add(SectorMI);
                                 }
-                                else if(SectorMI == 10)
+                                /*else if(SectorMI == 10)
                                 {
                                     String ahora = "";
                                     int numo = -1;
@@ -208,13 +233,41 @@ namespace SignumXaml
                                     }
 
                                     MessageBox.Show(ahora);
-                                }
+                                }*/
                                 else
                                 {
                                     tblsenaI.Text = "Nada";
                                 }
 
-                                
+
+                                numo = -1;
+                                foreach (int num in SectoresRecorridosD)
+                                {
+                                    if (numo != num)
+                                    {
+                                        temp += arr1[num];
+                                        numo = num;
+                                    }
+                                }
+
+                                if (BuscarSeñas(temp))
+                                {
+                                    temp = "";
+                                    SectoresRecorridosD.Clear();
+                                }
+                                else
+                                {
+                                    temp = "";
+                                }
+
+                                if (temp2 > 0)
+                                {
+                                    temp2--;
+                                }
+                                else
+                                {
+                                    tblsena.Text = "";
+                                }
 
                                 xPositionR.Text = "RX: " + (handRight.Position.X*100).ToString();
                                 yPositionR.Text = "RY: " + (handRight.Position.Y*100).ToString();

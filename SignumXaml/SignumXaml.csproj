@@ -62,6 +62,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Analisis.cs" />
+    <Compile Include="Coincidencia.cs" />
+    <Compile Include="Prueba.cs" />
     <Compile Include="Sectores.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
