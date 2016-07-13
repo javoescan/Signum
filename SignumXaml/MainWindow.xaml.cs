@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Kinect;
+using System.IO;
+using Newtonsoft.Json;
 
 namespace SignumXaml
 {
@@ -25,13 +27,54 @@ namespace SignumXaml
         KinectSensor _sensor;
         MultiSourceFrameReader _reader;
         IList<Body> _bodies;
-        int estado=0;
         string inicio = "";
+        String temp = "";
+        string[] arr1 = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i" };
+        int numo;
 
         List<int> SectoresRecorridosD = new List<int>();
         List<int> SectoresRecorridosI = new List<int>();
 
         double ElipseMedida = 0;
+
+        //Declaracion Joints
+        Joint handRight;
+        Joint thumbRight;
+        Joint handLeft;
+        Joint thumbLeft;
+        Joint head;
+        Joint neck;
+        Joint panza;
+        Joint hombroD;
+        Joint hombroI;
+        Joint espinahombro;
+        Joint cadera;
+
+        //Declaracion Sectores y Manos
+        Rectangle RectManoDerecha;
+        Rectangle RectManoIzquierda;
+        Rectangle Sector1;
+        Rectangle Sector2;
+        Rectangle Sector3;
+        Rectangle Sector4;
+        Rectangle Sector5;
+        Rectangle Sector6;
+        Rectangle Sector7;
+        Rectangle Sector8;
+        Rectangle Sector9;
+        Rectangle Sector0;
+        Rectangle[] SectoresRecs;
+
+        int SectorMD;
+        int SectorMI;
+
+        string rightHandState = "";
+        string leftHandState = "";
+
+        int temp2 = 0;
+
+        Dictionary<string, string> diccionario = new Dictionary<string, string>() { };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -39,8 +82,7 @@ namespace SignumXaml
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
-
+            TraerSeñas();
             _sensor = KinectSensor.GetDefault();
 
             if (_sensor != null)
@@ -65,20 +107,21 @@ namespace SignumXaml
             }
         }
 
-        Dictionary<string, string> diccionario = new Dictionary<string, string>()
-    {
-        { "abe", "Te quiero"},
-        { "ed", "Chau!"},
-        {"ada","Hola!" },
-        {"ghihg","Tengo hambre" }
-    };
-
-        int temp2 = 0;
+        void TraerSeñas()
+        {
+            diccionario = Seña.CargarSeñas();
+        }
+        
         bool BuscarSeñas(string text) {
-            string[] keywords = {"abe", "ada", "ghihg","ed"};
 
+            string[] keywords = new string[diccionario.Count];
+
+            for (int i = 0; i < diccionario.Count; i++)
+            {
+                keywords[i] = diccionario.Keys.ElementAt(i);
+            }
             List<Coincidencia> states = Analisis.FindAllStates(text, keywords);
-            if (states!=null && states.Count>0)
+            if (states != null && states.Count > 0)
             {
                 tblsena.Text = diccionario[states[0].key];
                 temp2 = 80;
@@ -86,6 +129,68 @@ namespace SignumXaml
             }
             return false;
         }
+
+        void BuscarJoints(Body body)
+        {
+            // Find the joints
+            handRight = body.Joints[JointType.HandRight];
+            thumbRight = body.Joints[JointType.ThumbRight];
+
+            handLeft = body.Joints[JointType.HandLeft];
+            thumbLeft = body.Joints[JointType.ThumbLeft];
+
+            head = body.Joints[JointType.Head];
+            neck = body.Joints[JointType.Neck];
+            panza = body.Joints[JointType.SpineMid];
+            hombroD = body.Joints[JointType.ShoulderRight];
+            hombroI = body.Joints[JointType.ShoulderLeft];
+            espinahombro = body.Joints[JointType.SpineShoulder];
+            cadera = body.Joints[JointType.SpineBase];
+        }
+        void DibujarEsqueleto(Body body = null)
+        {
+            if (body!=null)
+            {
+                canvas.DrawSkeleton(body, _sensor.CoordinateMapper);
+            }else { 
+            canvas.DrawHand(handRight, _sensor.CoordinateMapper);
+            canvas.DrawHand(handLeft, _sensor.CoordinateMapper);
+            canvas.DrawThumb(thumbRight, _sensor.CoordinateMapper);
+            canvas.DrawThumb(thumbLeft, _sensor.CoordinateMapper);
+            canvas.DrawPoint(head, _sensor.CoordinateMapper);
+            canvas.DrawPoint(panza, _sensor.CoordinateMapper);
+            }
+        }
+        void DibujarSectores()
+        {
+            RectManoDerecha = canvas.DibujarSector(handRight, handRight, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 100) / head.Position.Z));
+            RectManoIzquierda = canvas.DibujarSector(handLeft, handLeft, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 100) / head.Position.Z));
+            Sector0 = canvas.DibujarSector(head, hombroD, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+            Sector1 = canvas.DibujarSector(head, hombroI, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+            Sector2 = canvas.DibujarSector(neck, neck, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 200) / head.Position.Z), 80 / head.Position.Z);
+            Sector3 = canvas.DibujarSector(hombroD, hombroD, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+            Sector4 = canvas.DibujarSector(espinahombro, espinahombro, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+            Sector5 = canvas.DibujarSector(hombroI, hombroI, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+            Sector6 = canvas.DibujarSector(panza, hombroD, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+            Sector7 = canvas.DibujarSector(panza, panza, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+            Sector8 = canvas.DibujarSector(panza, hombroI, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+            Sector9 = canvas.DibujarSector(cadera, cadera, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
+            SectoresRecs = new Rectangle[10] { Sector0, Sector1, Sector2, Sector3, Sector4, Sector5, Sector6, Sector7, Sector8, Sector9};
+        }
+
+        void ActualizarSeñasTemporales(List<int> SectoresRecorridos)
+        {
+            numo = -1;
+            foreach (int num in SectoresRecorridosD)
+            {
+                if (numo != num)
+                {
+                    temp += arr1[num];
+                    numo = num;
+                }
+            }
+        }
+
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
             var reference = e.FrameReference.AcquireFrame();
@@ -99,16 +204,12 @@ namespace SignumXaml
                 }
             }
 
-
-            String temp = "";
-            
-            string[] arr1 = new string[] { "", "a", "b","c", "d", "e", "f", "g", "h", "i" };
-            int numo;
             // Body
             using (var frame = reference.BodyFrameReference.AcquireFrame())
             {
                 if (frame != null)
                 {
+                    
                     canvas.Children.Clear();
 
                     _bodies = new Body[frame.BodyFrameSource.BodyCount];
@@ -121,95 +222,25 @@ namespace SignumXaml
 
                             if (body.IsTracked)
                             {
-                                // Find the joints
-                                Joint handRight = body.Joints[JointType.HandRight];
-                                Joint thumbRight = body.Joints[JointType.ThumbRight];
 
-                                Joint handLeft = body.Joints[JointType.HandLeft];
-                                Joint thumbLeft = body.Joints[JointType.ThumbLeft];
+                                BuscarJoints(body);
 
-                                Joint head = body.Joints[JointType.Head];
-                                Joint neck = body.Joints[JointType.Neck];
-                                Joint panza = body.Joints[JointType.SpineMid];
-                                Joint hombroD = body.Joints[JointType.ShoulderRight];
-                                Joint hombroI = body.Joints[JointType.ShoulderLeft];
-                                Joint espinahombro = body.Joints[JointType.SpineShoulder];
-                                Joint cadera = body.Joints[JointType.SpineBase];
+                                /*OPCIONAL
+                                DibujarEsqueleto(body);*/
 
-
-                                // Draw hands and thumbs
-                                //canvas.DrawHand(handRight, _sensor.CoordinateMapper);
-                                // canvas.DrawHand(handLeft, _sensor.CoordinateMapper);
-                                // canvas.DrawThumb(thumbRight, _sensor.CoordinateMapper);
-                                // canvas.DrawThumb(thumbLeft, _sensor.CoordinateMapper);
-                                // canvas.DrawPoint(head, _sensor.CoordinateMapper);
-                                // canvas.DrawPoint(panza, _sensor.CoordinateMapper);
-
-                                Rectangle RectManoDerecha = canvas.DibujarSector(handRight, handRight, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 100) / head.Position.Z));
-                                Rectangle RectManoIzquierda = canvas.DibujarSector(handLeft, handLeft, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 100) / head.Position.Z));
-
-                               // canvas.DrawSkeleton(body, _sensor.CoordinateMapper);
-
-                                //Sector 1
-
-                               Rectangle Sector1 = canvas.DibujarSector(head, hombroD, _sensor.CoordinateMapper, Math.Abs(head.Position.Y-neck.Position.Y)* ((2  * 500 )/ head.Position.Z));
-
-                                //Sector 2
-                                Rectangle Sector2 = canvas.DibujarSector(head, hombroI, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
-
-                                //Sector 3
-                                Rectangle Sector3 = canvas.DibujarSector(neck, neck, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 200) / head.Position.Z),80/ head.Position.Z);
-
-                                //Sector 4
-                                Rectangle Sector4 = canvas.DibujarSector(hombroD, hombroD, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
-
-                                //Sector 5
-                                Rectangle Sector5 = canvas.DibujarSector(espinahombro, espinahombro, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
-
-                                //Sector 6
-                                Rectangle Sector6 = canvas.DibujarSector(hombroI, hombroI, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
-
-                                //Sector 7
-                                Rectangle Sector7 = canvas.DibujarSector(panza, hombroD, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
-
-                                //Sector 8
-                                Rectangle Sector8 = canvas.DibujarSector(panza, panza, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
-
-                                //Sector 9
-                                Rectangle Sector9 = canvas.DibujarSector(panza, hombroI, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
-
-                                //Sector 10
-                                Rectangle Sector10 = canvas.DibujarSector(cadera, cadera, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
-
-                                Rectangle[] SectoresRecs = new Rectangle[10] {Sector1,Sector2, Sector3, Sector4, Sector5, Sector6, Sector7, Sector8, Sector9, Sector10 };
+                                DibujarSectores();    
 
                                 tblResta.Text = ((head.Position.Y * 100 - 20) - (handRight.Position.Y * 100)).ToString();
                                 tblz.Text = panza.Position.Z.ToString();
 
-                                int SectorMD = Sectores.Intersecta(RectManoDerecha, SectoresRecs);
-                                int SectorMI = Sectores.Intersecta(RectManoIzquierda, SectoresRecs);
-
+                                //Mostrar intersecciones con sectores
+                                SectorMD = Sectores.Intersecta(RectManoDerecha, SectoresRecs);
+                                SectorMI = Sectores.Intersecta(RectManoIzquierda, SectoresRecs);
                                 if (SectorMD != -1 && SectorMD != 10)
                                 {
                                     tblsenaD.Text = "Mano Derecha en sector " + SectorMD.ToString();
-                                    SectoresRecorridosD.Add(SectorMD);
+                                    SectoresRecorridosD.Add(SectorMD-1);
                                 }
-                                
-                               /* else if(SectorMD == 10)
-                                {
-                                    String ahora = "";
-                                    int numo = -1;
-                                    foreach (int num in SectoresRecorridosD)
-                                    {
-                                        if (numo != num)
-                                        {
-                                            ahora += num.ToString() + ",";
-                                            numo = num;
-                                        }
-                                    }
-
-                                    MessageBox.Show(ahora);
-                                }*/
                                 else
                                 {
                                     tblsenaD.Text = "Nada";
@@ -218,38 +249,17 @@ namespace SignumXaml
                                 if (SectorMI != -1 && SectorMI != 10)
                                 {
                                     tblsenaI.Text = "Mano Izquierda en sector " + SectorMI.ToString();
-                                    SectoresRecorridosI.Add(SectorMI);
+                                    SectoresRecorridosI.Add(SectorMI-1);
                                 }
-                                /*else if(SectorMI == 10)
-                                {
-                                    String ahora = "";
-                                    int numo = -1;
-                                    foreach (int num in SectoresRecorridosI)
-                                    {
-                                        if (numo != num) { 
-                                        ahora += num.ToString() + ",";
-                                            numo = num;
-                                        }
-                                    }
-
-                                    MessageBox.Show(ahora);
-                                }*/
                                 else
                                 {
                                     tblsenaI.Text = "Nada";
                                 }
 
+                                ActualizarSeñasTemporales(SectoresRecorridosD);
 
-                                numo = -1;
-                                foreach (int num in SectoresRecorridosD)
-                                {
-                                    if (numo != num)
-                                    {
-                                        temp += arr1[num];
-                                        numo = num;
-                                    }
-                                }
-
+                                //Si encuentra la seña la muestra y reinicia los sectores recorridos hasta el momento
+                                //Si no, borra el temporal y va probando frame a frame hasta encontrar alguna seña
                                 if (BuscarSeñas(temp))
                                 {
                                     temp = "";
@@ -269,15 +279,15 @@ namespace SignumXaml
                                     tblsena.Text = "";
                                 }
 
+                                //Mostrar posiciones
                                 xPositionR.Text = "RX: " + (handRight.Position.X*100).ToString();
                                 yPositionR.Text = "RY: " + (handRight.Position.Y*100).ToString();
-
                                 xPositionL.Text = "LX: " + (handLeft.Position.X*100).ToString();
                                 yPositionL.Text = "LY: " + (handLeft.Position.Y*100).ToString();
-                                // Find the hand states
-                                string rightHandState = "-";
-                                string leftHandState = "-";
-
+                               
+                                //Encontrar estado de la mano
+                                rightHandState = "-";
+                                leftHandState = "-";
                                 switch (body.HandRightState)
                                 {
                                     case HandState.Open:
@@ -327,12 +337,78 @@ namespace SignumXaml
                         }
                         else
                         {
-                            estado = 0;
                             inicio = "";
                         }
                     }
                 }
             }
+        }
+
+        //Mostrar u ocultar información
+        private void CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            tblz.Visibility= Visibility.Visible;
+            tblResta.Visibility = Visibility.Visible;
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e)
+        {
+            tblz.Visibility = Visibility.Hidden;
+            tblResta.Visibility = Visibility.Hidden;
+        }
+
+        private void CheckBox_Checked_1(object sender, RoutedEventArgs e)
+        {
+
+            xPositionL.Visibility = Visibility.Visible;
+            xPositionR.Visibility = Visibility.Visible;
+            yPositionL.Visibility = Visibility.Visible;
+            yPositionR.Visibility = Visibility.Visible;
+        }
+
+        private void CheckBox_Unchecked_1(object sender, RoutedEventArgs e)
+        {
+
+            xPositionL.Visibility = Visibility.Hidden;
+            xPositionR.Visibility = Visibility.Hidden;
+            yPositionL.Visibility = Visibility.Hidden;
+            yPositionR.Visibility = Visibility.Hidden;
+        }
+
+        private void CheckBox_Checked_2(object sender, RoutedEventArgs e)
+        {
+            tblLeftHandState.Visibility = Visibility.Visible;
+            tblRightHandState.Visibility = Visibility.Visible;
+        }
+
+        private void CheckBox_Unchecked_2(object sender, RoutedEventArgs e)
+        {
+            tblLeftHandState.Visibility = Visibility.Hidden;
+            tblRightHandState.Visibility = Visibility.Hidden;
+        }
+
+        private void CheckBox_Checked_3(object sender, RoutedEventArgs e)
+        {
+            tblsena.Visibility = Visibility.Visible;
+            tblsenaD.Visibility = Visibility.Visible;
+            tblsenaI.Visibility = Visibility.Visible;
+        }
+
+        private void CheckBox_Unchecked_3(object sender, RoutedEventArgs e)
+        {
+            tblsena.Visibility = Visibility.Hidden;
+            tblsenaD.Visibility = Visibility.Hidden;
+            tblsenaI.Visibility = Visibility.Hidden;
+        }
+
+        private void CheckBox_Checked_4(object sender, RoutedEventArgs e)
+        {
+            tblPosicionMano.Visibility = Visibility.Visible;
+        }
+
+        private void CheckBox_Unchecked_4(object sender, RoutedEventArgs e)
+        {
+            tblPosicionMano.Visibility = Visibility.Hidden;
         }
     }
 }

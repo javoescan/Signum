@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SignumXaml"
         mc:Ignorable="d"
-        Title="Signum" Height="800" Width="1200" Loaded="Window_Loaded" Closed="Window_Closed">
+        Title="Signum" Height="800" Width="1200" Loaded="Window_Loaded" Closed="Window_Closed"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
         <Viewbox>
             <Grid Width="1920" Height="1080">
@@ -18,21 +19,28 @@
         </Viewbox>
         <Canvas HorizontalAlignment="Left" Height="240" VerticalAlignment="Top" Width="1192" Margin="0,529,0,0"/>
         <Canvas Name="arriba">
-            <TextBlock Name="xPositionR" Text="x" FontSize="48"/>
-            <TextBlock Name="yPositionR" Text="y" FontSize="48" Canvas.Top="34"/>
-            <TextBlock Name="xPositionL" Text="x" FontSize="48" Canvas.Top="103"/>
-            <TextBlock Name="yPositionL" Text="y" FontSize="48" Canvas.Top="143"/>
-            <TextBlock Name="tblRightHandState" Text="derecha" Canvas.Left="958" Canvas.Top="143" FontSize="48"/>
-            <TextBlock Name="tblLeftHandState" Text="Izquierda" Canvas.Left="958" Canvas.Top="244" FontSize="48"/>
-            <TextBlock Name="tblPosicionMano" Text="Posicion" Canvas.Left="958" Canvas.Top="334" FontSize="48"/>
-            <TextBlock Name="tblEstado" Text="Estado" Canvas.Left="958" Canvas.Top="400" FontSize="48"/>
-            <TextBlock Name="tblResta" Text="Relativo" Canvas.Left="958" Canvas.Top="466" FontSize="48"/>
-            <TextBlock Name="tblz" Text="z" Canvas.Left="958" Canvas.Top="535" FontSize="48"/>
-            <TextBlock Name="tblsenaD" Text="Nada" FontSize="48" Canvas.Top="577" Canvas.Left="10"/>
-            <TextBlock Name="tblsenaI" Text="Nada" FontSize="48" Canvas.Top="636" Canvas.Left="10"/>
-            <TextBlock Name="tblsena" Text="Nada" FontSize="48" Canvas.Top="370" Canvas.Left="10" Background="Yellow"/>
+            <TextBlock  Name="xPositionR" Text="x" Visibility="Hidden" FontSize="48"/>
+            <TextBlock Name="yPositionR" Text="y" Visibility="Hidden" FontSize="48" Canvas.Top="34"/>
+            <TextBlock Name="xPositionL" Text="x" Visibility="Hidden" FontSize="48" Canvas.Top="103"/>
+            <TextBlock Name="yPositionL" Text="y" Visibility="Hidden" FontSize="48" Canvas.Top="143"/>
+            <TextBlock  Background="White" Name="tblRightHandState" Visibility="Hidden" Text="derecha" Canvas.Left="958" Canvas.Top="143" FontSize="48"/>
+            <TextBlock Background="White" Name="tblLeftHandState" Visibility="Hidden" Text="Izquierda" Canvas.Left="958" Canvas.Top="244" FontSize="48"/>
+            <TextBlock Background="White" Name="tblPosicionMano" Visibility="Hidden" Text="Posicion" Canvas.Left="958" Canvas.Top="334" FontSize="48"/>
+            <TextBlock  Background="White" Name="tblResta" Visibility="Hidden" Text="Relativo" Canvas.Left="958" Canvas.Top="466" FontSize="48"/>
+            <TextBlock Background="White" Name="tblz" Visibility="Hidden" Text="z" Canvas.Left="958" Canvas.Top="535" FontSize="48"/>
+            <TextBlock Background="White" Name="tblsenaD" Visibility="Hidden" Text="Nada" FontSize="20" Canvas.Top="535" Canvas.Left="10"/>
+            <TextBlock Background="White" Name="tblsenaI" Visibility="Hidden" Text="Nada" FontSize="20" Canvas.Top="572" Canvas.Left="10"/>
+            <TextBlock Name="tblsena" Text="Nada" FontSize="36" Canvas.Top="614" Background="#FFF3E6E6" Width="1358" TextAlignment="Center" FontFamily="Global User Interface"/>
             <Canvas Name="pera">
             </Canvas>
+            <Menu x:Name="menu" Height="30" Canvas.Left="458" Canvas.Top="664" Width="468">
+                <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Cursor="Arrow" Content="Proporciones"/>
+                <CheckBox Checked="CheckBox_Checked_1" Unchecked="CheckBox_Unchecked_1" Cursor="Arrow" Content="Posiciones"/>
+                <CheckBox Checked="CheckBox_Checked_2" Unchecked="CheckBox_Unchecked_2" Cursor="Arrow" Content="Estados"/>
+                <CheckBox Checked="CheckBox_Checked_3" Unchecked="CheckBox_Unchecked_3" Cursor="Arrow" Content="Seña" IsChecked="True"/>
+                <CheckBox Checked="CheckBox_Checked_4" Unchecked="CheckBox_Unchecked_4" Cursor="Arrow" Content="Posicion respectiva"/>
+
+            </Menu>
         </Canvas>
     </Grid>
 

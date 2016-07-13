@@ -102,3 +102,31 @@ D:\Signum proyecto\SignumXaml\obj\Debug\MainWindow.baml
 D:\Signum proyecto\SignumXaml\obj\Debug\SignumXaml.g.resources
 D:\Signum proyecto\SignumXaml\obj\Debug\SignumXaml.Properties.Resources.resources
 D:\Signum proyecto\SignumXaml\obj\Debug\SignumXaml.csproj.GenerateResource.Cache
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\SignumXaml.exe.config
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\SignumXaml.exe
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\SignumXaml.pdb
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\SignumXaml.exe
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\SignumXaml.pdb
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.dll
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.Face.dll
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.Fusion.dll
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.Tools.dll
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.VisualGestureBuilder.dll
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.Wpf.Controls.dll
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Newtonsoft.Json.dll
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.xml
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.Face.xml
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.Fusion.xml
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.Tools.xml
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.VisualGestureBuilder.xml
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Microsoft.Kinect.Wpf.Controls.xml
+D:\Signum proyecto con cambios\SignumXaml\bin\Debug\Newtonsoft.Json.xml
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\SignumXaml.csprojResolveAssemblyReference.cache
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\MainWindow.g.cs
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\App.g.cs
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\SignumXaml_MarkupCompile.cache
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\SignumXaml_MarkupCompile.lref
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\MainWindow.baml
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\SignumXaml.g.resources
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\SignumXaml.Properties.Resources.resources
+D:\Signum proyecto con cambios\SignumXaml\obj\Debug\SignumXaml.csproj.GenerateResource.Cache
