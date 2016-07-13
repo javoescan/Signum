@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SignumXaml
 {
-    static class Seña
+    class Seña
     {
         public static string seña;
         public static string significado;
@@ -24,6 +24,23 @@ namespace SignumXaml
                 diccionario.Add(o1.GetValue("senasArray")[i]["sena"].ToString(), o1.GetValue("senasArray")[i]["significado"].ToString());
             }
             return diccionario;
+        }
+
+        public static void AgregarSeña(string[] seña)
+        {
+            //REEMPLAZO TODO, CAMBIAR
+            /*string json = JsonConvert.SerializeObject(seña);
+            System.IO.File.WriteAllText(@"D:\Signum proyecto con cambios\señas.json", json);*/
+
+            using (StreamReader r = new StreamReader(@"D:\Signum proyecto con cambios\señas.json"))
+            {
+                string jsonn = r.ReadToEnd();
+                List<Seña> persons = JsonConvert.DeserializeObject<List<Seña>>(jsonn);
+                //persons.Add(seña); esto no anda
+                string newJson = JsonConvert.SerializeObject(persons);
+                File.WriteAllText(@"D:\Signum proyecto con cambios\señas.json", newJson);
+                r.Close();
+            }
         }
     }
 }

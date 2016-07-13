@@ -31,11 +31,10 @@ namespace SignumXaml
         String temp = "";
         string[] arr1 = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i" };
         int numo;
-
+        bool buscoseña = true;
+        bool termino = false;
         List<int> SectoresRecorridosD = new List<int>();
         List<int> SectoresRecorridosI = new List<int>();
-
-        double ElipseMedida = 0;
 
         //Declaracion Joints
         Joint handRight;
@@ -132,13 +131,10 @@ namespace SignumXaml
 
         void BuscarJoints(Body body)
         {
-            // Find the joints
             handRight = body.Joints[JointType.HandRight];
             thumbRight = body.Joints[JointType.ThumbRight];
-
             handLeft = body.Joints[JointType.HandLeft];
             thumbLeft = body.Joints[JointType.ThumbLeft];
-
             head = body.Joints[JointType.Head];
             neck = body.Joints[JointType.Neck];
             panza = body.Joints[JointType.SpineMid];
@@ -191,6 +187,56 @@ namespace SignumXaml
             }
         }
 
+        void EncontrarEstadoMano(Body body)
+        {
+            rightHandState = "-";
+            leftHandState = "-";
+            switch (body.HandRightState)
+            {
+                case HandState.Open:
+                    rightHandState = "Open";
+                    break;
+                case HandState.Closed:
+                    rightHandState = "Closed";
+                    break;
+                case HandState.Lasso:
+                    rightHandState = "Lasso";
+                    break;
+                case HandState.Unknown:
+                    rightHandState = "Unknown...";
+                    break;
+                case HandState.NotTracked:
+                    rightHandState = "Not tracked";
+                    break;
+                default:
+                    break;
+            }
+
+            switch (body.HandLeftState)
+            {
+                case HandState.Open:
+                    leftHandState = "Open";
+                    break;
+                case HandState.Closed:
+                    leftHandState = "Closed";
+                    break;
+                case HandState.Lasso:
+                    leftHandState = "Lasso";
+                    break;
+                case HandState.Unknown:
+                    leftHandState = "Unknown...";
+                    break;
+                case HandState.NotTracked:
+                    leftHandState = "Not tracked";
+                    break;
+                default:
+                    break;
+            }
+
+            tblRightHandState.Text = rightHandState;
+            tblLeftHandState.Text = leftHandState;
+        }
+
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
             var reference = e.FrameReference.AcquireFrame();
@@ -233,6 +279,15 @@ namespace SignumXaml
                                 tblResta.Text = ((head.Position.Y * 100 - 20) - (handRight.Position.Y * 100)).ToString();
                                 tblz.Text = panza.Position.Z.ToString();
 
+                                //Mostrar posiciones
+                                xPositionR.Text = "RX: " + (handRight.Position.X * 100).ToString();
+                                yPositionR.Text = "RY: " + (handRight.Position.Y * 100).ToString();
+                                xPositionL.Text = "LX: " + (handLeft.Position.X * 100).ToString();
+                                yPositionL.Text = "LY: " + (handLeft.Position.Y * 100).ToString();
+
+                                //Encontrar estado de la mano
+                                EncontrarEstadoMano(body);
+
                                 //Mostrar intersecciones con sectores
                                 SectorMD = Sectores.Intersecta(RectManoDerecha, SectoresRecs);
                                 SectorMI = Sectores.Intersecta(RectManoIzquierda, SectoresRecs);
@@ -256,82 +311,54 @@ namespace SignumXaml
                                     tblsenaI.Text = "Nada";
                                 }
 
-                                ActualizarSeñasTemporales(SectoresRecorridosD);
-
-                                //Si encuentra la seña la muestra y reinicia los sectores recorridos hasta el momento
-                                //Si no, borra el temporal y va probando frame a frame hasta encontrar alguna seña
-                                if (BuscarSeñas(temp))
+                                if (buscoseña)
                                 {
-                                    temp = "";
-                                    SectoresRecorridosD.Clear();
+                                    ActualizarSeñasTemporales(SectoresRecorridosD);
+                                    //Si encuentra la seña la muestra y reinicia los sectores recorridos hasta el momento
+                                    //Si no, borra el temporal y va probando frame a frame hasta encontrar alguna seña
+                                    if (BuscarSeñas(temp))
+                                    {
+                                        temp = "";
+                                        SectoresRecorridosD.Clear();
+                                    }
+                                    else
+                                    {
+                                        temp = "";
+                                    }
+
+                                    if (temp2 > 0)
+                                    {
+                                        temp2--;
+                                    }
+                                    else
+                                    {
+                                        tblsena.Text = "";
+                                    }
                                 }
                                 else
                                 {
-                                    temp = "";
+                                    if (termino)
+                                    {
+                                        //NO MUESTRA TXT NI BTN
+                                        txtSignificado.Visibility = Visibility.Visible;
+                                        btnSignificado.Visibility = Visibility.Visible;
+                                        if(txtSignificado.Text != "")
+                                        {
+                                            buscoseña = true;
+                                            termino = false;
+                                            string[] seña = new string[] { SectoresRecorridosD.ToString(), txtSignificado.Text };
+                                            btnTerminar.Visibility = Visibility.Hidden;
+                                            txtSignificado.Visibility = Visibility.Hidden;
+                                            btnSignificado.Visibility = Visibility.Hidden;
+                                            Seña.AgregarSeña(seña);
+                                        }
+                                        else
+                                        {
+                                            MessageBox.Show("Por favor ingrese el significado de la seña");
+                                        }
+                                    }
                                 }
 
-                                if (temp2 > 0)
-                                {
-                                    temp2--;
-                                }
-                                else
-                                {
-                                    tblsena.Text = "";
-                                }
-
-                                //Mostrar posiciones
-                                xPositionR.Text = "RX: " + (handRight.Position.X*100).ToString();
-                                yPositionR.Text = "RY: " + (handRight.Position.Y*100).ToString();
-                                xPositionL.Text = "LX: " + (handLeft.Position.X*100).ToString();
-                                yPositionL.Text = "LY: " + (handLeft.Position.Y*100).ToString();
-                               
-                                //Encontrar estado de la mano
-                                rightHandState = "-";
-                                leftHandState = "-";
-                                switch (body.HandRightState)
-                                {
-                                    case HandState.Open:
-                                        rightHandState = "Open";
-                                        break;
-                                    case HandState.Closed:
-                                        rightHandState = "Closed";
-                                        break;
-                                    case HandState.Lasso:
-                                        rightHandState = "Lasso";
-                                        break;
-                                    case HandState.Unknown:
-                                        rightHandState = "Unknown...";
-                                        break;
-                                    case HandState.NotTracked:
-                                        rightHandState = "Not tracked";
-                                        break;
-                                    default:
-                                        break;
-                                }
-
-                                switch (body.HandLeftState)
-                                {
-                                    case HandState.Open:
-                                        leftHandState = "Open";
-                                        break;
-                                    case HandState.Closed:
-                                        leftHandState = "Closed";
-                                        break;
-                                    case HandState.Lasso:
-                                        leftHandState = "Lasso";
-                                        break;
-                                    case HandState.Unknown:
-                                        leftHandState = "Unknown...";
-                                        break;
-                                    case HandState.NotTracked:
-                                        leftHandState = "Not tracked";
-                                        break;
-                                    default:
-                                        break;
-                                }
-
-                                tblRightHandState.Text = rightHandState;
-                                tblLeftHandState.Text = leftHandState;
                             }
                             
                         }
@@ -409,6 +436,18 @@ namespace SignumXaml
         private void CheckBox_Unchecked_4(object sender, RoutedEventArgs e)
         {
             tblPosicionMano.Visibility = Visibility.Hidden;
+        }
+
+        private void btnGrabar_Click(object sender, RoutedEventArgs e)
+        {
+            buscoseña = false;
+            btnGrabar.Visibility = Visibility.Hidden;
+            btnTerminar.Visibility = Visibility.Visible;
+        }
+
+        private void btnTerminar_Click(object sender, RoutedEventArgs e)
+        {
+            termino = true;
         }
     }
 }
