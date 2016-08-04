@@ -13,15 +13,18 @@ namespace SignumXaml
     {
         public static string seña;
         public static string significado;
-        static Dictionary<string, string> diccionario = new Dictionary<string, string>() { };
-        public static Dictionary<string,string> CargarSeñas()
+        static Dictionary<ManoSeña, string> diccionario = new Dictionary<ManoSeña, string>() { };
+        public static Dictionary<ManoSeña, string> CargarSeñas()
         {
-            string strFileName = @"D:\Signum proyecto con cambios\señas.json";
+            string strFileName = @"D:\javinio\Signum proyecto con cambios\señas.json";
             string strFileContent = File.ReadAllText(strFileName);
             JObject o1 = JObject.Parse(strFileContent);
             for (int i = 0; i < o1.GetValue("senasArray").Count(); i++)
             {
-                diccionario.Add(o1.GetValue("senasArray")[i]["sena"].ToString(), o1.GetValue("senasArray")[i]["significado"].ToString());
+                ManoSeña ms = new ManoSeña();
+                ms.manoderecha = o1.GetValue("senasArray")[i]["senad"].ToString();
+                ms.manoizquierda = o1.GetValue("senasArray")[i]["senai"].ToString();
+                diccionario.Add(ms , o1.GetValue("senasArray")[i]["significado"].ToString());
             }
             return diccionario;
         }

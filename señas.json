@@ -1,20 +1,29 @@
 {
     "senasArray":[{
-            "sena":"abe",
-            "significado":"Te quiero"
+      "senad": "abe",
+      "senai": "",
+      "significado":"Te quiero"
         },
         {
-            "sena":"ed",
+          "senad": "ed",
+          "senai": "",
             "significado":"Chau!"
         },
         {
-            "sena":"ada",
+          "senad": "ed",
+          "senai": "ef",
             "significado":"Hola!"
         },
         {
-            "sena":"ghihg",
+          "senad": "ghihg",
+          "senai": "",
             "significado":"Tengo hambre"
         },
+        {
+          "senad": "a",
+          "senai": "b",
+            "significado":"¿Orejas?"
+        }
 
     ]
 }

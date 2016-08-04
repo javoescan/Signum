@@ -5,3 +5,18 @@ por que lista con sectores por los que pasó es solo de la mano derecha?
 cambiar temp por nombre mejor
 
 ver como hacer para usar los clicks en vez de actualizar estados
+
+
+1. dos manos
+2. agregar
+3. que pasa con señas que son mas largas que otras
+
+OBJETO MANO/SECTOR
+Mano= I/D
+Sector
+
+Temp -> Conjunto de Objetos MANO/SECTOR
+
+dos manos alm
+
+si coincidencia.pos son = , en teoria las manos D y I pasaron por ahi al mismo tiempo 

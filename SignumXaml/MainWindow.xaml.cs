@@ -28,8 +28,11 @@ namespace SignumXaml
         MultiSourceFrameReader _reader;
         IList<Body> _bodies;
         string inicio = "";
-        String temp = "";
+        String tempderecha = "";
+        String tempizquierda = "";
         string[] arr1 = new string[] { "a", "b", "c", "d", "e", "f", "g", "h", "i" };
+        List<string> keywordsderecha = new List<string>();
+        List<string> keywordsizquierda = new List<string>();
         int numo;
         bool buscoseña = true;
         bool termino = false;
@@ -72,7 +75,7 @@ namespace SignumXaml
 
         int temp2 = 0;
 
-        Dictionary<string, string> diccionario = new Dictionary<string, string>() { };
+        Dictionary<ManoSeña, string> diccionario = new Dictionary<ManoSeña, string>() { };
 
         public MainWindow()
         {
@@ -109,24 +112,62 @@ namespace SignumXaml
         void TraerSeñas()
         {
             diccionario = Seña.CargarSeñas();
-        }
-        
-        bool BuscarSeñas(string text) {
-
-            string[] keywords = new string[diccionario.Count];
-
             for (int i = 0; i < diccionario.Count; i++)
             {
-                keywords[i] = diccionario.Keys.ElementAt(i);
+                ManoSeña ms = new ManoSeña();
+                ms = diccionario.Keys.ElementAt(i);
+                keywordsderecha.Add(ms.manoderecha);
+                }
+            for (int i = 0; i < diccionario.Count; i++)
+            {
+                ManoSeña ms = new ManoSeña();
+                ms = diccionario.Keys.ElementAt(i);
+                if (ms.manoizquierda!="")
+                {
+                    keywordsizquierda.Add(ms.manoizquierda);
+                }
             }
-            List<Coincidencia> states = Analisis.FindAllStates(text, keywords);
+        }
+        
+
+        ManoSeña BuscarSeñas(string text, bool esderecha = true) {
+            string[] keywordsd = new string[keywordsderecha.Count];
+            string[] keywordsi = new string[keywordsizquierda.Count];
+
+
+            for (int i = 0; i < keywordsderecha.Count; i++)
+            {
+                ManoSeña ms = new ManoSeña();
+                keywordsd[i] = keywordsderecha.ElementAt(i);
+            }
+
+            for (int i = 0; i < keywordsizquierda.Count; i++)
+            {
+                ManoSeña ms = new ManoSeña();
+                keywordsi[i] = keywordsizquierda.ElementAt(i);
+            }
+
+            List<Coincidencia> states = new List<Coincidencia>();
+
+            if (esderecha)
+            {
+                states = Analisis.FindAllStates(text, keywordsd);
+            }
+            else { states = Analisis.FindAllStates(text, keywordsi); }
+            
             if (states != null && states.Count > 0)
             {
-                tblsena.Text = diccionario[states[0].key];
-                temp2 = 80;
-                return true;
+                ManoSeña ms = new ManoSeña();
+                if (esderecha)
+                {
+                    ms.manoderecha = states[0].key;
+                }
+                else { ms.manoizquierda = states[0].key; }
+
+
+                return ms;
             }
-            return false;
+            return null;
         }
 
         void BuscarJoints(Body body)
@@ -174,17 +215,33 @@ namespace SignumXaml
             SectoresRecs = new Rectangle[10] { Sector0, Sector1, Sector2, Sector3, Sector4, Sector5, Sector6, Sector7, Sector8, Sector9};
         }
 
-        void ActualizarSeñasTemporales(List<int> SectoresRecorridos)
+        void ActualizarSeñasTemporales(List<int> SectoresRecorridos, bool esderecha = true)
         {
-            numo = -1;
-            foreach (int num in SectoresRecorridosD)
+            if (esderecha==true)
             {
-                if (numo != num)
+                numo = -1;
+                foreach (int num in SectoresRecorridos)
                 {
-                    temp += arr1[num];
-                    numo = num;
+                    if (numo != num)
+                    {
+                        tempderecha += arr1[num];
+                        numo = num;
+                    }
                 }
             }
+            else
+            {
+                numo = -1;
+                foreach (int num in SectoresRecorridos)
+                {
+                    if (numo != num)
+                    {
+                        tempizquierda += arr1[num];
+                        numo = num;
+                    }
+                }
+            }
+            
         }
 
         void EncontrarEstadoMano(Body body)
@@ -311,20 +368,60 @@ namespace SignumXaml
                                     tblsenaI.Text = "Nada";
                                 }
 
-                                if (buscoseña)
-                                {
                                     ActualizarSeñasTemporales(SectoresRecorridosD);
-                                    //Si encuentra la seña la muestra y reinicia los sectores recorridos hasta el momento
-                                    //Si no, borra el temporal y va probando frame a frame hasta encontrar alguna seña
-                                    if (BuscarSeñas(temp))
+                                     ActualizarSeñasTemporales(SectoresRecorridosI,false);
+                                //Si encuentra la seña la muestra y reinicia los sectores recorridos hasta el momento
+                                //Si no, borra el temporal y va probando frame a frame hasta encontrar alguna seña
+                                if (BuscarSeñas(tempderecha) != null)
                                     {
-                                        temp = "";
-                                        SectoresRecorridosD.Clear();
+
+                                        if (tempizquierda != "" && BuscarSeñas(tempizquierda, false) != null)
+                                        {
+                                        ManoSeña mano = new ManoSeña();
+                                        mano.manoderecha = BuscarSeñas(tempderecha).manoderecha;
+                                        mano.manoizquierda = BuscarSeñas(tempizquierda, false).manoizquierda;
+                                        //MostrarSeña
+                                        if (diccionario.ContainsKey(mano))
+                                        {
+                                            tblsena.Text = diccionario[mano];
+                                            temp2 = 80;
+                                            tempderecha = "";
+                                            tempizquierda = "";
+                                            SectoresRecorridosD.Clear();
+                                            SectoresRecorridosI.Clear();
+                                        }
+                                        else
+                                        {
+                                            tempizquierda = "";
+                                            tempderecha = "";
+                                        }
+                                    }
+                                        else
+                                        {
+                                        //MostrarSeña
+                                        if (diccionario.ContainsKey(BuscarSeñas(tempderecha)))
+                                        {
+                                            tblsena.Text = diccionario[BuscarSeñas(tempderecha)];
+                                            temp2 = 80;
+                                            tempderecha = "";
+                                            tempizquierda = "";
+                                            SectoresRecorridosD.Clear();
+                                            SectoresRecorridosI.Clear();
+                                        }
+                                        else
+                                        {
+                                            tempizquierda = "";
+                                            tempderecha = "";
+                                        }
+                                        
+                                    }
+                                        
                                     }
                                     else
-                                    {
-                                        temp = "";
-                                    }
+                                {
+                                        tempizquierda = "";
+                                        tempderecha = "";
+                                }
 
                                     if (temp2 > 0)
                                     {
@@ -334,30 +431,6 @@ namespace SignumXaml
                                     {
                                         tblsena.Text = "";
                                     }
-                                }
-                                else
-                                {
-                                    if (termino)
-                                    {
-                                        //NO MUESTRA TXT NI BTN
-                                        txtSignificado.Visibility = Visibility.Visible;
-                                        btnSignificado.Visibility = Visibility.Visible;
-                                        if(txtSignificado.Text != "")
-                                        {
-                                            buscoseña = true;
-                                            termino = false;
-                                            string[] seña = new string[] { SectoresRecorridosD.ToString(), txtSignificado.Text };
-                                            btnTerminar.Visibility = Visibility.Hidden;
-                                            txtSignificado.Visibility = Visibility.Hidden;
-                                            btnSignificado.Visibility = Visibility.Hidden;
-                                            Seña.AgregarSeña(seña);
-                                        }
-                                        else
-                                        {
-                                            MessageBox.Show("Por favor ingrese el significado de la seña");
-                                        }
-                                    }
-                                }
 
                             }
                             

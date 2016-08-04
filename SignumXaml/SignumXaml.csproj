@@ -67,6 +67,7 @@
     </ApplicationDefinition>
     <Compile Include="Analisis.cs" />
     <Compile Include="Coincidencia.cs" />
+    <Compile Include="ManoSeña.cs" />
     <Compile Include="Prueba.cs" />
     <Compile Include="Sectores.cs" />
     <Compile Include="Seña.cs" />
