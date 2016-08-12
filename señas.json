@@ -19,10 +19,15 @@
           "senai": "",
             "significado":"Tengo hambre"
         },
-        {
-          "senad": "a",
-          "senai": "b",
-            "significado":"¿Orejas?"
+      {
+        "senad": "a",
+        "senai": "b",
+        "significado": "Escuchame"
+      },
+      {
+          "senad": "gd",
+          "senai": "if",
+            "significado":"Levantate"
         }
 
     ]

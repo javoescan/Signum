@@ -22,12 +22,13 @@ namespace SignumXaml
 
             Point point = jointx.Scale(mapper);
             Point point2 = jointy.Scale(mapper);
-            
+
             Rectangle rectangle = new Rectangle
             {
                 Width = diametro,
                 Height = diametro,
-                Stroke = new SolidColorBrush(Colors.White)
+                Stroke = new SolidColorBrush(Colors.Black),
+                StrokeThickness = 4
             };
 
             Canvas.SetLeft(rectangle, point.X - rectangle.Width / 2);

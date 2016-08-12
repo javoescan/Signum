@@ -11,12 +11,13 @@ namespace SignumXaml
 {
     class Seña
     {
-        public static string seña;
-        public static string significado;
+        public  string senad;
+        public  string senai;
+        public  string significado;
         static Dictionary<ManoSeña, string> diccionario = new Dictionary<ManoSeña, string>() { };
         public static Dictionary<ManoSeña, string> CargarSeñas()
         {
-            string strFileName = @"D:\javinio\Signum proyecto con cambios\señas.json";
+            string strFileName = @"D:\Signum proyecto\señas.json";
             string strFileContent = File.ReadAllText(strFileName);
             JObject o1 = JObject.Parse(strFileContent);
             for (int i = 0; i < o1.GetValue("senasArray").Count(); i++)
@@ -29,19 +30,20 @@ namespace SignumXaml
             return diccionario;
         }
 
-        public static void AgregarSeña(string[] seña)
+        public static void AgregarSeña(Seña nueva)
         {
-            //REEMPLAZO TODO, CAMBIAR
-            /*string json = JsonConvert.SerializeObject(seña);
-            System.IO.File.WriteAllText(@"D:\Signum proyecto con cambios\señas.json", json);*/
 
-            using (StreamReader r = new StreamReader(@"D:\Signum proyecto con cambios\señas.json"))
+            using (StreamReader r = new StreamReader(@"D:\Signum proyecto\señas.json"))
             {
                 string jsonn = r.ReadToEnd();
-                List<Seña> persons = JsonConvert.DeserializeObject<List<Seña>>(jsonn);
-                //persons.Add(seña); esto no anda
-                string newJson = JsonConvert.SerializeObject(persons);
-                File.WriteAllText(@"D:\Signum proyecto con cambios\señas.json", newJson);
+                SeñasJson señas = new SeñasJson();
+                //no anda trae señas null
+                señas = JsonConvert.DeserializeObject<SeñasJson>(jsonn);
+                Seña nueva2 = new Seña();
+                nueva2 = nueva;
+                señas.data.Add(nueva2);
+                string newJson = JsonConvert.SerializeObject(señas.data);
+                File.WriteAllText(@"D:\Signum proyecto\señas.json", newJson);
                 r.Close();
             }
         }

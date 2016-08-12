@@ -71,6 +71,10 @@
     <Compile Include="Prueba.cs" />
     <Compile Include="Sectores.cs" />
     <Compile Include="Seña.cs" />
+    <Compile Include="SeñasJson.cs" />
+    <Compile Include="Significado.xaml.cs">
+      <DependentUpon>Significado.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -84,6 +88,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Significado.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

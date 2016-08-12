@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using Microsoft.Kinect;
 using System.IO;
 using Newtonsoft.Json;
+using Microsoft.VisualBasic;
 
 namespace SignumXaml
 {
@@ -34,7 +35,8 @@ namespace SignumXaml
         List<string> keywordsderecha = new List<string>();
         List<string> keywordsizquierda = new List<string>();
         int numo;
-        bool buscoseña = true;
+        bool grabando = false;
+        bool comenzargrabado = false;
         bool termino = false;
         List<int> SectoresRecorridosD = new List<int>();
         List<int> SectoresRecorridosI = new List<int>();
@@ -42,6 +44,7 @@ namespace SignumXaml
         //Declaracion Joints
         Joint handRight;
         Joint thumbRight;
+        Joint wristRight;
         Joint handLeft;
         Joint thumbLeft;
         Joint head;
@@ -174,6 +177,8 @@ namespace SignumXaml
         {
             handRight = body.Joints[JointType.HandRight];
             thumbRight = body.Joints[JointType.ThumbRight];
+            wristRight = body.Joints[JointType.WristRight];
+            handRight = body.Joints[JointType.HandRight];
             handLeft = body.Joints[JointType.HandLeft];
             thumbLeft = body.Joints[JointType.ThumbLeft];
             head = body.Joints[JointType.Head];
@@ -200,7 +205,7 @@ namespace SignumXaml
         }
         void DibujarSectores()
         {
-            RectManoDerecha = canvas.DibujarSector(handRight, handRight, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 100) / head.Position.Z));
+                RectManoDerecha = canvas.DibujarSector(handRight, handRight, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 100) / head.Position.Z));
             RectManoIzquierda = canvas.DibujarSector(handLeft, handLeft, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 100) / head.Position.Z));
             Sector0 = canvas.DibujarSector(head, hombroD, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
             Sector1 = canvas.DibujarSector(head, hombroI, _sensor.CoordinateMapper, Math.Abs(head.Position.Y - neck.Position.Y) * ((2 * 500) / head.Position.Z));
@@ -317,6 +322,9 @@ namespace SignumXaml
 
                     _bodies = new Body[frame.BodyFrameSource.BodyCount];
 
+                    zmano.Text = handRight.Position.Z.ToString();
+                    zcabeza.Text = head.Position.Z.ToString();
+
                     frame.GetAndRefreshBodyData(_bodies);
                     foreach (var body in _bodies)
                     {
@@ -335,6 +343,68 @@ namespace SignumXaml
 
                                 tblResta.Text = ((head.Position.Y * 100 - 20) - (handRight.Position.Y * 100)).ToString();
                                 tblz.Text = panza.Position.Z.ToString();
+
+                                if (!grabando && body.HandRightState == HandState.Closed && body.HandLeftState == HandState.Closed)
+                                {
+                                    grabando = true;
+                                    SectoresRecorridosD.Clear();
+                                    SectoresRecorridosI.Clear();
+                                }
+
+                                if (grabando && comenzargrabado)
+                                {
+                                        if (body.HandRightState == HandState.Closed && body.HandLeftState == HandState.Closed)
+                                        {
+                                            grabando = false;
+                                            comenzargrabado = false;
+                                            tblgrabando.Visibility = Visibility.Hidden;
+                                            if (SectoresRecorridosD.Count>0)
+                                            {
+                                                var dialog = new Significado();
+                                                if (dialog.ShowDialog() == true)
+                                                {
+                                                    if (dialog.ResponseText == "")
+                                                    {
+                                                        MessageBox.Show("Debe escribir significado");
+                                                    }
+                                                    else
+                                                    {
+                                                        Seña nueva = new Seña();
+                                                        ActualizarSeñasTemporales(SectoresRecorridosD);
+                                                        nueva.senad = tempderecha;
+                                                        if (SectoresRecorridosI.Count>0)
+                                                        {
+                                                            ActualizarSeñasTemporales(SectoresRecorridosI,false);
+                                                            nueva.senai = tempizquierda;
+                                                        }
+                                                        else
+                                                        {
+                                                            nueva.senai = "";
+                                                        }
+                                                        nueva.significado = dialog.ResponseText;
+                                                        Seña.AgregarSeña(nueva);
+                                                        tempizquierda = "";
+                                                        tempderecha = "";
+                                                        SectoresRecorridosD.Clear();
+                                                        SectoresRecorridosI.Clear();
+                                                    }
+                                                }
+                                            
+                                        }
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (grabando && !comenzargrabado)
+                                    {
+                                        if (body.HandRightState != HandState.Closed && body.HandLeftState != HandState.Closed)
+                                        {
+                                            comenzargrabado = true;
+                                            tblgrabando.Visibility = Visibility.Visible;
+                                        }
+                                    }
+                                }
 
                                 //Mostrar posiciones
                                 xPositionR.Text = "RX: " + (handRight.Position.X * 100).ToString();
@@ -368,7 +438,9 @@ namespace SignumXaml
                                     tblsenaI.Text = "Nada";
                                 }
 
-                                    ActualizarSeñasTemporales(SectoresRecorridosD);
+                                if (!grabando)
+                                {
+                                ActualizarSeñasTemporales(SectoresRecorridosD);
                                      ActualizarSeñasTemporales(SectoresRecorridosI,false);
                                 //Si encuentra la seña la muestra y reinicia los sectores recorridos hasta el momento
                                 //Si no, borra el temporal y va probando frame a frame hasta encontrar alguna seña
@@ -422,8 +494,9 @@ namespace SignumXaml
                                         tempizquierda = "";
                                         tempderecha = "";
                                 }
+                            }
 
-                                    if (temp2 > 0)
+                            if (temp2 > 0)
                                     {
                                         temp2--;
                                     }
@@ -510,17 +583,19 @@ namespace SignumXaml
         {
             tblPosicionMano.Visibility = Visibility.Hidden;
         }
+    }
 
-        private void btnGrabar_Click(object sender, RoutedEventArgs e)
+    partial class Significado : Window
+    {
+        public string ResponseText
         {
-            buscoseña = false;
-            btnGrabar.Visibility = Visibility.Hidden;
-            btnTerminar.Visibility = Visibility.Visible;
+            get { return ResponseTextBox.Text; }
+            set { ResponseTextBox.Text = value; }
         }
 
-        private void btnTerminar_Click(object sender, RoutedEventArgs e)
+        private void OKButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            termino = true;
+            DialogResult = true;
         }
     }
 }

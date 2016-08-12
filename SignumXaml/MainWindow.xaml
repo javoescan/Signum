@@ -30,6 +30,9 @@
             <TextBlock Background="White" Name="tblz" Visibility="Hidden" Text="z" Canvas.Left="958" Canvas.Top="535" FontSize="48"/>
             <TextBlock Background="White" Name="tblsenaD" Visibility="Hidden" Text="Nada" FontSize="20" Canvas.Top="535" Canvas.Left="10"/>
             <TextBlock Background="White" Name="tblsenaI" Visibility="Hidden" Text="Nada" FontSize="20" Canvas.Top="572" Canvas.Left="10"/>
+            <TextBlock Background="White" Name="zmano" Text="Nada" FontSize="20" Canvas.Top="444" Canvas.Left="10"/>
+            <TextBlock Background="White" Name="zcabeza" Text="Nada" FontSize="20" Canvas.Top="476" Canvas.Left="10"/>
+            <TextBlock Background="White" Name="tblgrabando" Visibility="Hidden" Text="Grabando" FontSize="20" Canvas.Top="244" Canvas.Left="10"/>
             <TextBlock Name="tblsena" Text="Nada" FontSize="36" Canvas.Top="614" Background="#FFF3E6E6" Width="1358" TextAlignment="Center" FontFamily="Global User Interface"/>
             <Canvas Name="pera">
             </Canvas>
@@ -41,8 +44,6 @@
                 <CheckBox Checked="CheckBox_Checked_4" Unchecked="CheckBox_Unchecked_4" Cursor="Arrow" Content="Posicion respectiva"/>
 
             </Menu>
-            <Button x:Name="btnGrabar" Content="Grabar Seña" Canvas.Left="1011" Canvas.Top="664" Width="134" Height="30" Click="btnGrabar_Click"/>
-            <Button x:Name="btnTerminar" Content="Terminar" Canvas.Left="1011" Canvas.Top="664" Width="134" Height="30" Visibility="Hidden" Click="btnTerminar_Click"/>
             <TextBlock x:Name="txtSignificado" Canvas.Left="366" TextWrapping="Wrap" Text="TextBlock" Canvas.Top="309" Height="89" Width="521" Visibility="Hidden"/>
             <Button x:Name="btnSignificado" Content="Terminar" Canvas.Left="834" Canvas.Top="311" Width="119" Height="37" Visibility="Hidden"/>
         </Canvas>
