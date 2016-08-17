@@ -387,6 +387,8 @@ namespace SignumXaml
                                                         tempderecha = "";
                                                         SectoresRecorridosD.Clear();
                                                         SectoresRecorridosI.Clear();
+                                                        diccionario.Clear();
+                                                        TraerSeñas();
                                                     }
                                                 }
                                             

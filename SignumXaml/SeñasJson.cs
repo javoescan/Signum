@@ -8,6 +8,6 @@ namespace SignumXaml
 {
     class SeñasJson
     {
-        public List<Seña> data { get; set; }
+        public List<Seña> senasArray { get; set; }
     }
 }
