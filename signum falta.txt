@@ -1,11 +1,4 @@
-AGREGAR SEÑA
-
-por que lista con sectores por los que pasó es solo de la mano derecha?
-
 cambiar temp por nombre mejor
-
-ver como hacer para usar los clicks en vez de actualizar estados
-
 
 1. dos manos
 2. agregar

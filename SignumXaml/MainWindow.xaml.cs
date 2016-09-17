@@ -37,7 +37,6 @@ namespace SignumXaml
         int numo;
         bool grabando = false;
         bool comenzargrabado = false;
-        bool termino = false;
         List<int> SectoresRecorridosD = new List<int>();
         List<int> SectoresRecorridosI = new List<int>();
 
@@ -115,62 +114,16 @@ namespace SignumXaml
         void TraerSeñas()
         {
             diccionario = Seña.CargarSeñas();
-            for (int i = 0; i < diccionario.Count; i++)
-            {
-                ManoSeña ms = new ManoSeña();
-                ms = diccionario.Keys.ElementAt(i);
-                keywordsderecha.Add(ms.manoderecha);
-                }
-            for (int i = 0; i < diccionario.Count; i++)
-            {
-                ManoSeña ms = new ManoSeña();
-                ms = diccionario.Keys.ElementAt(i);
-                if (ms.manoizquierda!="")
-                {
-                    keywordsizquierda.Add(ms.manoizquierda);
-                }
-            }
-        }
-        
 
-        ManoSeña BuscarSeñas(string text, bool esderecha = true) {
-            string[] keywordsd = new string[keywordsderecha.Count];
-            string[] keywordsi = new string[keywordsizquierda.Count];
+            List<string> lstSenasD = new List<string>();
 
-
-            for (int i = 0; i < keywordsderecha.Count; i++)
+            foreach (ManoSeña sena in diccionario.Keys)
             {
-                ManoSeña ms = new ManoSeña();
-                keywordsd[i] = keywordsderecha.ElementAt(i);
+                lstSenasD.Add(sena.manoderecha);
             }
 
-            for (int i = 0; i < keywordsizquierda.Count; i++)
-            {
-                ManoSeña ms = new ManoSeña();
-                keywordsi[i] = keywordsizquierda.ElementAt(i);
-            }
-
-            List<Coincidencia> states = new List<Coincidencia>();
-
-            if (esderecha)
-            {
-                states = Analisis.FindAllStates(text, keywordsd);
-            }
-            else { states = Analisis.FindAllStates(text, keywordsi); }
-            
-            if (states != null && states.Count > 0)
-            {
-                ManoSeña ms = new ManoSeña();
-                if (esderecha)
-                {
-                    ms.manoderecha = states[0].key;
-                }
-                else { ms.manoizquierda = states[0].key; }
-
-
-                return ms;
-            }
-            return null;
+            Analisis.GenerarListasEnlazadas(lstSenasD);
+           
         }
 
         void BuscarJoints(Body body)
@@ -298,6 +251,11 @@ namespace SignumXaml
             tblRightHandState.Text = rightHandState;
             tblLeftHandState.Text = leftHandState;
         }
+       
+        char ultimaLetraEnviada = ' ';
+        char LetraEnviar = ' ';
+
+        int contador = 45;
 
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
@@ -333,6 +291,7 @@ namespace SignumXaml
 
                             if (body.IsTracked)
                             {
+                                
 
                                 BuscarJoints(body);
 
@@ -387,6 +346,8 @@ namespace SignumXaml
                                                         tempderecha = "";
                                                         SectoresRecorridosD.Clear();
                                                         SectoresRecorridosI.Clear();
+                                                        diccionario.Clear();
+                                                        TraerSeñas();
                                                     }
                                                 }
                                             
@@ -422,6 +383,9 @@ namespace SignumXaml
                                 {
                                     tblsenaD.Text = "Mano Derecha en sector " + SectorMD.ToString();
                                     SectoresRecorridosD.Add(SectorMD-1);
+
+                                    LetraEnviar = Convert.ToChar(arr1[SectorMD-1]);
+
                                 }
                                 else
                                 {
@@ -440,63 +404,48 @@ namespace SignumXaml
 
                                 if (!grabando)
                                 {
-                                ActualizarSeñasTemporales(SectoresRecorridosD);
-                                     ActualizarSeñasTemporales(SectoresRecorridosI,false);
-                                //Si encuentra la seña la muestra y reinicia los sectores recorridos hasta el momento
-                                //Si no, borra el temporal y va probando frame a frame hasta encontrar alguna seña
-                                if (BuscarSeñas(tempderecha) != null)
+                                    contador--;
+                                    if (ultimaLetraEnviada!=LetraEnviar)
                                     {
+                                        contador = 45;
+                                        ultimaLetraEnviada = LetraEnviar;
 
-                                        if (tempizquierda != "" && BuscarSeñas(tempizquierda, false) != null)
+                                        if (Analisis.NuevoSector(LetraEnviar)!="")
                                         {
-                                        ManoSeña mano = new ManoSeña();
-                                        mano.manoderecha = BuscarSeñas(tempderecha).manoderecha;
-                                        mano.manoizquierda = BuscarSeñas(tempizquierda, false).manoizquierda;
-                                        //MostrarSeña
-                                        if (diccionario.ContainsKey(mano))
-                                        {
-                                            tblsena.Text = diccionario[mano];
+                                            tblsena.Text = Analisis.seña;
                                             temp2 = 80;
-                                            tempderecha = "";
-                                            tempizquierda = "";
-                                            SectoresRecorridosD.Clear();
-                                            SectoresRecorridosI.Clear();
+                                            if (Analisis.seguira)
+                                            {
+                                                Analisis.listaSiguiente = Analisis.Recorrer(Analisis.proximaLetra, true, ref Analisis.raiz);
+                                            }
                                         }
-                                        else
+                                        if (contador == 0)
                                         {
-                                            tempizquierda = "";
-                                            tempderecha = "";
+                                            contador = 45;
                                         }
                                     }
-                                        else
+                                    if (contador==0)
+                                    {
+                                        ultimaLetraEnviada = ' ';
+                                        Analisis.NuevoSector('.');
+                                        contador = 45;
+                                        if (Analisis.seguira)
                                         {
-                                        //MostrarSeña
-                                        if (diccionario.ContainsKey(BuscarSeñas(tempderecha)))
-                                        {
-                                            tblsena.Text = diccionario[BuscarSeñas(tempderecha)];
-                                            temp2 = 80;
-                                            tempderecha = "";
-                                            tempizquierda = "";
-                                            SectoresRecorridosD.Clear();
-                                            SectoresRecorridosI.Clear();
+                                            Analisis.listaSiguiente = Analisis.Recorrer(Analisis.proximaLetra, true, ref Analisis.raiz);
                                         }
-                                        else
-                                        {
-                                            tempizquierda = "";
-                                            tempderecha = "";
-                                        }
-                                        
                                     }
-                                        
-                                    }
-                                    else
-                                {
-                                        tempizquierda = "";
-                                        tempderecha = "";
+
                                 }
-                            }
+                                tblsenaI.Text = contador.ToString();
+                                /*
+                                
+                                tempderecha = "";
+                                tempizquierda = "";
+                                SectoresRecorridosD.Clear();
+                                SectoresRecorridosI.Clear();
+                                */
 
-                            if (temp2 > 0)
+                                if (temp2 > 0)
                                     {
                                         temp2--;
                                     }

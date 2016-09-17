@@ -3,140 +3,213 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace SignumXaml
 {
     class Analisis
     {
+        static bool primero = true;
 
-        private const int MaxStates = 6 * 50 + 10;
-        private const int MaxChars = 26;
+        static bool termina = false;
+        static bool mostrar = false;
 
-        private static int[] Out = new int[MaxStates];
-        private static int[] FF = new int[MaxStates];
-        private static int[,] GF = new int[MaxStates, MaxChars];
+        public static String seña = "";
 
-        private static int BuildMatchingMachine(string[] words, char lowestChar = 'a', char highestChar = 'z')
-        {
-            Out = Enumerable.Repeat(0, Out.Length).ToArray();
-            FF = Enumerable.Repeat(-1, FF.Length).ToArray();
+        public static List<Nodo> raiz = new List<Nodo>();
 
-            for (int i = 0; i < MaxStates; ++i)
+        public static List<Nodo> listaSiguiente = new List<Nodo>();
+
+        public static bool seguira = false;
+        public static char proximaLetra = ' ';
+
+        public static void GenerarListasEnlazadas(List<string> senas) {
+            listaSiguiente = raiz;
+            bool primera = true;
+            foreach (string seña in senas)
             {
-                for (int j = 0; j < MaxChars; ++j)
+                for (int i = 0; i < seña.Length; i++)
                 {
-                    GF[i, j] = -1;
-                }
-            }
-
-            int states = 1;
-
-            for (int i = 0; i < words.Length; ++i)
-            {
-                string keyword = words[i];
-                int currentState = 0;
-
-                for (int j = 0; j < keyword.Length; ++j)
-                {
-                    int c = keyword[j] - lowestChar;
-
-                    if (GF[currentState, c] == -1)
+                    if (i == 0 && !primera)
                     {
-                        GF[currentState, c] = states++;
+
+                        listaSiguiente = Armar(seña[i], true, ref listaSiguiente);
                     }
-
-                    currentState = GF[currentState, c];
-                }
-
-                Out[currentState] |= (1 << i);
-            }
-
-            for (int c = 0; c < MaxChars; ++c)
-            {
-                if (GF[0, c] == -1)
-                {
-                    GF[0, c] = 0;
-                }
-            }
-
-            List<int> q = new List<int>();
-            for (int c = 0; c <= highestChar - lowestChar; ++c)
-            {
-                if (GF[0, c] != -1 && GF[0, c] != 0)
-                {
-                    FF[GF[0, c]] = 0;
-                    q.Add(GF[0, c]);
-                }
-            }
-
-            while (Convert.ToBoolean(q.Count))
-            {
-                int state = q[0];
-                q.RemoveAt(0);
-
-                for (int c = 0; c <= highestChar - lowestChar; ++c)
-                {
-                    if (GF[state, c] != -1)
+                    else
                     {
-                        int failure = FF[state];
-
-                        while (GF[failure, c] == -1)
-                        {
-                            failure = FF[failure];
-                        }
-
-                        failure = GF[failure, c];
-                        FF[GF[state, c]] = failure;
-                        Out[GF[state, c]] |= Out[failure];
-                        q.Add(GF[state, c]);
+                        listaSiguiente = Armar(seña[i], false, ref listaSiguiente);
                     }
                 }
-            }
 
-            return states;
-        }
-
-        private static int FindNextState(int currentState, char nextInput, char lowestChar = 'a')
-        {
-            int answer = currentState;
-            int c = nextInput - lowestChar;
-
-            while (GF[answer, c] == -1)
-            {
-                answer = FF[answer];
-            }
-
-            return GF[answer, c];
-        }
-
-        public static List<Coincidencia> FindAllStates(string text, string[] keywords, char lowestChar = 'a', char highestChar = 'z')
-        {
-            BuildMatchingMachine(keywords, lowestChar, highestChar);
-
-            int currentState = 0;
-            List<Coincidencia> retVal = new List<Coincidencia>();
-
-            for (int i = 0; i < text.Length; ++i)
-            {
-                currentState = FindNextState(currentState, text[i], lowestChar);
-
-                if (Out[currentState] == 0)
-                    continue;
-
-                for (int j = 0; j < keywords.Length; ++j)
+                if (primera)
                 {
-                    if (Convert.ToBoolean(Out[currentState] & (1 << j)))
+                    primera = false;
+                }
+
+            }
+            listaSiguiente = Armar(' ', true, ref listaSiguiente);
+        }
+
+        public static List<Nodo> Armar(char letra, bool nuevaPalabra, ref List<Nodo> listaActual)
+        {
+
+            if (nuevaPalabra)
+            {
+                //agrego asterisco
+                Nodo ult = new Nodo();
+                ult.letra = '*';
+                listaActual.Add(ult);
+
+
+                listaActual = raiz;
+                //busco en lista actual
+                bool esta = false;
+                foreach (Nodo actual in listaActual)
+                {
+                    if (actual.letra.Equals(letra))
                     {
-                        Coincidencia encuentro = new Coincidencia();
-                        encuentro.pos = i - keywords[j].Length + 1;
-                        encuentro.key = keywords[j];
-                        retVal.Insert(0, encuentro);
+                        esta = true;
+                        return actual.lista;
                     }
                 }
-            }
 
-            return retVal;
+                if (!esta && letra != ' ')
+                {
+                    Nodo nuevo = new Nodo();
+                    nuevo.letra = letra;
+                    listaActual.Add(nuevo);
+                    return nuevo.lista;
+                }
+
+                return null;
+            }
+            else
+            {
+
+                bool esta = false;
+                foreach (Nodo actual in listaActual)
+                {
+                    if (actual.letra.Equals(letra))
+                    {
+                        esta = true;
+                        return actual.lista;
+                    }
+                }
+
+                if (!esta)
+                {
+                    Nodo nuevo = new Nodo();
+                    nuevo.letra = letra;
+                    listaActual.Add(nuevo);
+                    return nuevo.lista;
+                }
+                return null;
+            }
         }
 
+        public static List<Nodo> Recorrer(char letra, bool nuevaPalabra, ref List<Nodo> listaActual)
+        {
+            mostrar = false;
+            seguira = false;
+            if (nuevaPalabra)
+            {
+
+                seña = "";
+                listaActual = raiz;
+                //busco en lista actual
+                bool esta = false;
+                termina = false;
+                foreach (Nodo actual in listaActual)
+                {
+                    if (actual.letra.Equals(letra))
+                    {
+                        seña += letra;
+                        esta = true;
+                        return actual.lista;
+                    }
+                    if (actual.letra.Equals('*'))
+                    {
+                        termina = true;
+                    }
+                }
+
+                if (!esta)
+                {
+                    if (termina)
+                    {
+                        listaActual = raiz;
+                        return null;
+                    }
+
+                }
+
+                return raiz;
+            }
+            else
+            {
+
+                bool esta = false;
+                termina = false;
+                foreach (Nodo actual in listaActual)
+                {
+                    if (actual.letra.Equals(letra))
+                    {
+                        esta = true;
+                        seña += letra;
+                        return actual.lista;
+                    }
+                    if (actual.letra.Equals('*'))
+                    {
+                        termina = true;
+                    }
+                }
+
+                if (!esta)
+                {
+                    if (termina)
+                    {
+                        listaActual = raiz;
+                        proximaLetra = letra;
+                        seguira = true;
+                        mostrar = true;
+                        return listaActual;
+                    }
+                    else
+                    {
+                        listaActual = raiz;
+                        proximaLetra = letra;
+                        seguira = true;
+                        return listaActual;
+                    }
+
+                }
+                return listaActual;
+            }
+        }
+
+        public static String NuevoSector(char sector)
+        {
+            if (primero)
+            {
+                primero = false;
+                listaSiguiente = Recorrer(sector, true, ref raiz);
+                if (mostrar)
+                {
+                    return seña;
+
+                }
+                return "";
+            }
+            else
+            {
+                listaSiguiente = Recorrer(sector, false, ref listaSiguiente);
+                if (mostrar)
+                {
+                    return seña;
+                }
+                return "";
+            }
+
+        }
     }
 }

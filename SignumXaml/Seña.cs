@@ -32,20 +32,25 @@ namespace SignumXaml
 
         public static void AgregarSeña(Seña nueva)
         {
-
-            using (StreamReader r = new StreamReader(@"D:\Signum proyecto\señas.json"))
-            {
-                string jsonn = r.ReadToEnd();
-                SeñasJson señas = new SeñasJson();
-                //no anda trae señas null
-                señas = JsonConvert.DeserializeObject<SeñasJson>(jsonn);
-                Seña nueva2 = new Seña();
-                nueva2 = nueva;
-                señas.data.Add(nueva2);
-                string newJson = JsonConvert.SerializeObject(señas.data);
+                List<Seña> data = new List<Seña>();
+                string strFileName = @"D:\Signum proyecto\señas.json";
+                string strFileContent = File.ReadAllText(strFileName);
+                JObject o1 = JObject.Parse(strFileContent);
+                for (int i = 0; i < o1.GetValue("senasArray").Count(); i++)
+                {
+                    Seña ms = new Seña();
+                    ms.senad = o1.GetValue("senasArray")[i]["senad"].ToString();
+                    ms.senai = o1.GetValue("senasArray")[i]["senai"].ToString();
+                    ms.significado = o1.GetValue("senasArray")[i]["significado"].ToString();
+                    data.Add(ms);
+                }
+                data.Add(nueva);
+            SeñasJson nuevalista = new SeñasJson();
+            nuevalista.senasArray = new List<Seña>();
+            nuevalista.senasArray=data;
+                string newJson = JsonConvert.SerializeObject(nuevalista);
                 File.WriteAllText(@"D:\Signum proyecto\señas.json", newJson);
-                r.Close();
             }
         }
     }
-}
+

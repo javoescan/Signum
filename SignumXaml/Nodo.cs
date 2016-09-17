@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace SignumXaml
 {
-    class SeñasJson
+    class Nodo
     {
-        public List<Seña> senasArray { get; set; }
+        public char letra;
+        public List<Nodo> lista = new List<Nodo>();
     }
 }
