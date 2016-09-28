@@ -9,22 +9,11 @@ namespace SignumXaml
 {
     class Analisis
     {
-        static bool primero = true;
+       public static ListParameters lpDerecha = new ListParameters();
+       public static ListParameters lpIzquierda = new ListParameters();
 
-        static bool termina = false;
-        static bool mostrar = false;
-
-        public static String seña = "";
-
-        public static List<Nodo> raiz = new List<Nodo>();
-
-        public static List<Nodo> listaSiguiente = new List<Nodo>();
-
-        public static bool seguira = false;
-        public static char proximaLetra = ' ';
-
-        public static void GenerarListasEnlazadas(List<string> senas) {
-            listaSiguiente = raiz;
+        public static void GenerarListasEnlazadas(List<string> senas, ListParameters lp) {
+            lp.listaSiguiente = lp.raiz;
             bool primera = true;
             foreach (string seña in senas)
             {
@@ -33,11 +22,11 @@ namespace SignumXaml
                     if (i == 0 && !primera)
                     {
 
-                        listaSiguiente = Armar(seña[i], true, ref listaSiguiente);
+                        lp.listaSiguiente = Armar(seña[i], true,ref lp.listaSiguiente,lp);
                     }
                     else
                     {
-                        listaSiguiente = Armar(seña[i], false, ref listaSiguiente);
+                        lp.listaSiguiente = Armar(seña[i], false, ref lp.listaSiguiente, lp);
                     }
                 }
 
@@ -47,10 +36,10 @@ namespace SignumXaml
                 }
 
             }
-            listaSiguiente = Armar(' ', true, ref listaSiguiente);
+            lp.listaSiguiente = Armar(' ', true, ref lp.listaSiguiente, lp);
         }
 
-        public static List<Nodo> Armar(char letra, bool nuevaPalabra, ref List<Nodo> listaActual)
+        public static List<Nodo> Armar(char letra, bool nuevaPalabra, ref List<Nodo> listaActual,ListParameters lp)
         {
 
             if (nuevaPalabra)
@@ -61,7 +50,7 @@ namespace SignumXaml
                 listaActual.Add(ult);
 
 
-                listaActual = raiz;
+                listaActual = lp.raiz;
                 //busco en lista actual
                 bool esta = false;
                 foreach (Nodo actual in listaActual)
@@ -107,78 +96,82 @@ namespace SignumXaml
             }
         }
 
-        public static List<Nodo> Recorrer(char letra, bool nuevaPalabra, ref List<Nodo> listaActual)
+        public static List<Nodo> Recorrer(char letra, bool nuevaPalabra, ref List<Nodo> listaActual, ListParameters lp)
         {
-            mostrar = false;
-            seguira = false;
+            if (listaActual == null)
+            {
+                MessageBox.Show("ak");
+            }
+            lp.mostrar = false;
+            lp.seguira = false;
             if (nuevaPalabra)
             {
 
-                seña = "";
-                listaActual = raiz;
+                lp.seña = "";
+                listaActual = lp.raiz;
                 //busco en lista actual
                 bool esta = false;
-                termina = false;
+                lp.termina = false;
                 foreach (Nodo actual in listaActual)
                 {
                     if (actual.letra.Equals(letra))
                     {
-                        seña += letra;
+                        lp.seña += letra;
                         esta = true;
                         return actual.lista;
                     }
                     if (actual.letra.Equals('*'))
                     {
-                        termina = true;
+                        lp.termina = true;
                     }
                 }
 
                 if (!esta)
                 {
-                    if (termina)
+                    if (lp.termina)
                     {
-                        listaActual = raiz;
-                        return null;
+                        listaActual = lp.raiz;
+                        return listaActual;
                     }
 
                 }
 
-                return raiz;
+                return lp.raiz;
             }
             else
             {
 
                 bool esta = false;
-                termina = false;
+                lp.termina = false;
                 foreach (Nodo actual in listaActual)
                 {
                     if (actual.letra.Equals(letra))
                     {
                         esta = true;
-                        seña += letra;
+                        lp.seña += letra;
                         return actual.lista;
                     }
                     if (actual.letra.Equals('*'))
                     {
-                        termina = true;
+                        lp.termina = true;
                     }
                 }
 
                 if (!esta)
                 {
-                    if (termina)
+                    if (lp.termina)
                     {
-                        listaActual = raiz;
-                        proximaLetra = letra;
-                        seguira = true;
-                        mostrar = true;
+                        listaActual = lp.raiz;
+                        lp.proximaLetra = letra;
+                        lp.seguira = true;
+                        lp.mostrar = true;
                         return listaActual;
                     }
                     else
                     {
-                        listaActual = raiz;
-                        proximaLetra = letra;
-                        seguira = true;
+                        listaActual = lp.raiz;
+                        lp.proximaLetra = letra;
+                        lp.seguira = true;
                         return listaActual;
                     }
 
@@ -187,27 +180,36 @@ namespace SignumXaml
             }
         }
 
-        public static String NuevoSector(char sector)
+        public static String NuevoSector(char sector, ListParameters lp)
         {
-            if (primero)
+            lp.señaMostrar = "";
+            if (lp.primero)
             {
-                primero = false;
-                listaSiguiente = Recorrer(sector, true, ref raiz);
-                if (mostrar)
+                lp.primero = false;
+                lp.listaSiguiente = Recorrer(sector, true, ref lp.raiz, lp);
+                if (lp.mostrar)
                 {
-                    return seña;
-
+                    lp.señaMostrar = lp.seña;
                 }
-                return "";
+                if (lp.seguira)
+                {
+                    lp.listaSiguiente = Recorrer(lp.proximaLetra, true, ref lp.listaSiguiente,lp);
+                }
+                return lp.señaMostrar;
             }
             else
             {
-                listaSiguiente = Recorrer(sector, false, ref listaSiguiente);
-                if (mostrar)
+                lp.listaSiguiente = Recorrer(sector, false, ref lp.listaSiguiente,lp);
+                if (lp.mostrar)
                 {
-                    return seña;
+                    lp.señaMostrar = lp.seña;
+
                 }
-                return "";
+                if (lp.seguira)
+                {
+                    lp.listaSiguiente = Recorrer(lp.proximaLetra, true, ref lp.listaSiguiente,lp);
+                }
+                return lp.señaMostrar;
             }
 
         }

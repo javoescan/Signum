@@ -13,3 +13,7 @@ Temp -> Conjunto de Objetos MANO/SECTOR
 dos manos alm
 
 si coincidencia.pos son = , en teoria las manos D y I pasaron por ahi al mismo tiempo 
+
+
+----------------------------------------
+ruta generica
