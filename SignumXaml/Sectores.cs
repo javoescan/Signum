@@ -28,7 +28,7 @@ namespace SignumXaml
                 Width = diametro,
                 Height = diametro,
                 Stroke = new SolidColorBrush(Colors.Black),
-                StrokeThickness = 4
+                StrokeThickness = 0
             };
 
             Canvas.SetLeft(rectangle, point.X - rectangle.Width / 2);

@@ -32,8 +32,8 @@
             <TextBlock Background="White" Name="tblsenaI" Visibility="Hidden" Text="Nada" FontSize="20" Canvas.Top="572" Canvas.Left="10"/>
             <TextBlock Background="White" Name="zmano" Text="Nada" FontSize="20" Canvas.Top="444" Canvas.Left="10"/>
             <TextBlock Background="White" Name="zcabeza" Text="Nada" FontSize="20" Canvas.Top="476" Canvas.Left="10"/>
-            <TextBlock Background="White" Name="tblgrabando" Visibility="Hidden" Text="Grabando" FontSize="20" Canvas.Top="244" Canvas.Left="10"/>
-            <TextBlock Name="tblsena" Text="Nada" FontSize="36" Canvas.Top="614" Background="#FFF3E6E6" Width="1358" TextAlignment="Center" FontFamily="Global User Interface"/>
+            <TextBlock Background="White" Name="tblgrabando" Text="" FontSize="20" Canvas.Top="244" Canvas.Left="10"/>
+            <TextBlock Name="tblsena" FontSize="36" Canvas.Top="614" Background="#FFF3E6E6" Width="1358" TextAlignment="Center" FontFamily="Global User Interface"/>
             <Canvas Name="pera">
             </Canvas>
             <Menu x:Name="menu" Height="30" Canvas.Left="458" Canvas.Top="664" Width="468">
