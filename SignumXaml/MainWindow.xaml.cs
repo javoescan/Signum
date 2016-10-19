@@ -268,7 +268,28 @@ namespace SignumXaml
         string tempSeñaMI = "";
         int contSeñaTemp = 0;
 
+        void ReinciarParametrosDeDeteccion() {
+            SectoresRecorridosD.Clear();
+            SectoresRecorridosI.Clear();
+            tempizquierda = "";
+            tempderecha = "";
+            tblgrabando.Text = "";
+            grabando = false;
+            comenzargrabado = false;
 
+            ultimaLetraEnviada = '.';
+            LetraEnviar = '.';
+
+            ultimaLetraEnviadaI = '.';
+            LetraEnviarI = '.';
+
+            contadorDerecha = 100;
+            contadorIzquierda = 100;
+
+            tempSeñaMD = "";
+            tempSeñaMI = "";
+            contSeñaTemp = 0;
+        }
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
             var reference = e.FrameReference.AcquireFrame();
@@ -321,13 +342,18 @@ namespace SignumXaml
                                     SectoresRecorridosD.Clear();
                                     SectoresRecorridosI.Clear();
                                     tblgrabando.Text = "Grabando";
+                                    
                                 }
 
                                 if (grabando)
                                 {
-                                    if (body.HandRightState == HandState.Open && body.HandLeftState == HandState.Open)
+                                    if (body.HandRightState != HandState.Closed || body.HandLeftState != HandState.Closed)
                                     {
                                         comenzargrabado = true;
+                                    }
+                                    foreach (Rectangle item in SectoresRecs)
+                                    {
+                                        item.StrokeThickness = 1;
                                     }
                                     if (comenzargrabado && body.HandRightState == HandState.Closed && body.HandLeftState == HandState.Closed)
                                     {
@@ -368,38 +394,16 @@ namespace SignumXaml
 
                                                     Analisis.lpDerecha.listaSiguiente = Analisis.lpDerecha.raiz;
                                                     Analisis.lpIzquierda.listaSiguiente = Analisis.lpIzquierda.raiz;
-                                                    /*
-                                                    ultimaLetraEnviada = '.';
-                                                    LetraEnviar = '.';
-
-                                                    ultimaLetraEnviadaI = '.';
-                                                    LetraEnviarI = '.';
-
-                                                    contadorDerecha = 100;
-                                                    contadorIzquierda = 100;
-
-                                                    tempSeñaMD = "";
-                                                    tempSeñaMI = "";
-                                                    contSeñaTemp = 0;
-                                                    */
                                                 }
                                             }
                                             else
                                             {
-                                                SectoresRecorridosD.Clear();
-                                                SectoresRecorridosI.Clear();
-                                                tblgrabando.Text = "";
-                                                grabando = false;
-                                                comenzargrabado = false;
+                                                ReinciarParametrosDeDeteccion();
                                             }
 
                                         }
                                         else {
-                                            SectoresRecorridosD.Clear();
-                                            SectoresRecorridosI.Clear();
-                                            tblgrabando.Text = "";
-                                            grabando = false;
-                                            comenzargrabado = false;
+                                            ReinciarParametrosDeDeteccion();
                                         }
                                     }
                                     
@@ -519,6 +523,7 @@ namespace SignumXaml
                                                 ms.manoderecha = tempSeñaMD;
                                                 ms.manoizquierda = tempSeñaMI;
                                                 tblsena.Text = diccionario[ms];
+                                                fondosena.Visibility = Visibility.Visible;
                                                 temp2 = 80;
                                             }
                                             catch (Exception)
@@ -543,6 +548,7 @@ namespace SignumXaml
                                     else
                                     {
                                         tblsena.Text = "";
+                                        fondosena.Visibility = Visibility.Hidden;
                                     }
 
                                 }
@@ -578,6 +584,8 @@ namespace SignumXaml
             xPositionR.Visibility = Visibility.Visible;
             yPositionL.Visibility = Visibility.Visible;
             yPositionR.Visibility = Visibility.Visible;
+            tblsenaD.Visibility = Visibility.Visible;
+            tblsenaI.Visibility = Visibility.Visible;
         }
 
         private void CheckBox_Unchecked_1(object sender, RoutedEventArgs e)
@@ -587,6 +595,9 @@ namespace SignumXaml
             xPositionR.Visibility = Visibility.Hidden;
             yPositionL.Visibility = Visibility.Hidden;
             yPositionR.Visibility = Visibility.Hidden;
+            tblsenaD.Visibility = Visibility.Hidden;
+            tblsenaI.Visibility = Visibility.Hidden;
+
         }
 
         private void CheckBox_Checked_2(object sender, RoutedEventArgs e)
@@ -604,15 +615,13 @@ namespace SignumXaml
         private void CheckBox_Checked_3(object sender, RoutedEventArgs e)
         {
             tblsena.Visibility = Visibility.Visible;
-            tblsenaD.Visibility = Visibility.Visible;
-            tblsenaI.Visibility = Visibility.Visible;
+            
         }
 
         private void CheckBox_Unchecked_3(object sender, RoutedEventArgs e)
         {
             tblsena.Visibility = Visibility.Hidden;
-            tblsenaD.Visibility = Visibility.Hidden;
-            tblsenaI.Visibility = Visibility.Hidden;
+            
         }
 
         private void CheckBox_Checked_4(object sender, RoutedEventArgs e)

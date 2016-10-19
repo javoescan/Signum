@@ -8,45 +8,229 @@
         Title="Signum" Height="800" Width="1200" Loaded="Window_Loaded" Closed="Window_Closed"
         WindowStartupLocation="CenterScreen" WindowState="Maximized">
     <Grid>
-        <Viewbox>
-            <Grid Width="1920" Height="1080">
-                <Image Name="camera" />
-                <Canvas Name="canvas">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="118"/>
+        </Grid.RowDefinitions>
 
+
+
+        <Viewbox Grid.RowSpan="2">
+            <Grid Width="1920" Height="1080">
+                <Image x:Name="camera" />
+                <Canvas x:Name="canvas"/>
+                <Canvas x:Name="arriba">
+
+                    <Rectangle Name="fondosena" Height="168" Canvas.Left="598" Canvas.Top="695" Width="834" Fill="White" RenderTransformOrigin="0.5,0.5" Visibility="Hidden">
+                        <Rectangle.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="180"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Rectangle.RenderTransform>
+                        <Rectangle.OpacityMask>
+                            <RadialGradientBrush>
+                                <GradientStop Color="Black" Offset="0.56"/>
+                                <GradientStop Offset="1"/>
+                            </RadialGradientBrush>
+                        </Rectangle.OpacityMask>
+                        <Rectangle.Stroke>
+                            <SolidColorBrush Color="#FFA24848" Opacity="0"/>
+                        </Rectangle.Stroke>
+                    </Rectangle>
+
+                    <TextBlock x:Name="tblsena" FontSize="60" Canvas.Top="721" Width="640" TextAlignment="Center" FontFamily="Moire Light" Height="81" Canvas.Left="696" Text="" Margin="0" Padding="0" RenderTransformOrigin="0.505,-0.13">
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                        <TextBlock.Foreground>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FFFF8C03" Offset="1"/>
+                                <GradientStop Color="Black" Offset="0.72"/>
+                            </LinearGradientBrush>
+                        </TextBlock.Foreground>
+                    </TextBlock>
+                    <TextBlock  x:Name="xPositionR" Text="x" Visibility="Hidden" FontSize="48" Canvas.Top="267" FontFamily="Nueva Std" Canvas.Left="1">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock x:Name="yPositionR" Text="y" Visibility="Hidden" FontSize="48" Canvas.Top="345" FontFamily="Nueva Std">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock x:Name="xPositionL" Text="x" Visibility="Hidden" FontSize="48" Canvas.Top="426" FontFamily="Nueva Std">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock x:Name="yPositionL" Text="y" Visibility="Hidden" FontSize="48" Canvas.Top="501" FontFamily="Nueva Std">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock x:Name="tblRightHandState" Visibility="Hidden" Text="derecha" Canvas.Left="1604" Canvas.Top="164" FontSize="48" FontFamily="Nueva Std" Padding="50,10">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock x:Name="tblLeftHandState" Visibility="Hidden" Text="Izquierda" Canvas.Left="1604" Canvas.Top="265" FontSize="48" FontFamily="Nueva Std" Padding="50,10">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock x:Name="tblPosicionMano" Visibility="Hidden" Text="Posicion" Canvas.Left="1604" Canvas.Top="361" FontSize="48" FontFamily="Nueva Std" Padding="50,10">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock x:Name="tblResta" Visibility="Hidden" Text="Relativo" Canvas.Left="1602" Canvas.Top="459" FontSize="48" FontFamily="Nueva Std" Padding="50,10">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock x:Name="tblz" Visibility="Hidden" Text="z" Canvas.Left="1604" Canvas.Top="555" FontSize="48" FontFamily="Nueva Std" Padding="50,10">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock x:Name="tblgrabando" Text="" FontSize="20" Canvas.Top="815" Canvas.Left="1639" RenderTransformOrigin="0.5,0.5" FontFamily="Adobe Heiti Std R">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="White" Opacity="0.3"/>
+                        </TextBlock.Background>
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="3" ScaleY="3"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                    <TextBlock x:Name="tblsenaD" Visibility="Hidden" Text="Nada" FontSize="20" Canvas.Top="710" Canvas.Left="226" RenderTransformOrigin="0.5,0.5" Foreground="Black" FontFamily="Nueva Std" HorizontalAlignment="Left">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="3" ScaleY="3"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                    <TextBlock x:Name="tblsenaI" Visibility="Hidden" Text="Nada" FontSize="20" Canvas.Top="795" Canvas.Left="225" RenderTransformOrigin="0.5,0.5" Foreground="Black" FontFamily="Nueva Std" HorizontalAlignment="Left">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="3" ScaleY="3"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                    <TextBlock x:Name="zmano" Text="Nada" FontSize="20" Canvas.Top="536" Canvas.Left="58" RenderTransformOrigin="0.5,0.5" Foreground="Black" FontFamily="Nueva Std" HorizontalAlignment="Left" Visibility="Hidden">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="3" ScaleY="3"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                    <TextBlock x:Name="zcabeza" Text="Nada" FontSize="20" Canvas.Top="621" Canvas.Left="58" RenderTransformOrigin="0.5,0.5" Foreground="Black" FontFamily="Nueva Std" HorizontalAlignment="Left" Visibility="Hidden">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.3"/>
+                        </TextBlock.Background>
+                        <TextBlock.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform ScaleX="3" ScaleY="3"/>
+                                <SkewTransform/>
+                                <RotateTransform/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </TextBlock.RenderTransform>
+                    </TextBlock>
+                    <Image x:Name="logo_png" Height="167" Canvas.Left="39" Source="logo.png" Stretch="Fill" Canvas.Top="39" Width="434"/>
 
                 </Canvas>
+                <Rectangle Fill="#FF000002" HorizontalAlignment="Left" Height="109" VerticalAlignment="Top" Width="1900" Margin="10,961,0,0">
+                    <Rectangle.Stroke>
+                        <SolidColorBrush Color="#FFA24848" Opacity="0"/>
+                    </Rectangle.Stroke>
+                </Rectangle>
+                <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Cursor="Arrow" Content="Proporciones" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="222,1016,1586,42" FontFamily="Moire Light" Width="112" Foreground="White" Background="Black" BorderBrush="White">
+                    <CheckBox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="3" ScaleY="3"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </CheckBox.RenderTransform>
+                </CheckBox>
+                <CheckBox Checked="CheckBox_Checked_1" Unchecked="CheckBox_Unchecked_1" Cursor="Arrow" Content="Posiciones" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="862,1015,955,43" FontFamily="Moire Light" Width="103" Foreground="White" Background="Black" BorderBrush="White">
+                    <CheckBox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="3" ScaleY="3"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </CheckBox.RenderTransform>
+                </CheckBox>
+                <CheckBox Checked="CheckBox_Checked_2" Unchecked="CheckBox_Unchecked_2" Cursor="Arrow" Content="Estados" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="562,1017,1269,41" FontFamily="Moire Light" Width="89" Foreground="White" Background="Black" BorderBrush="White">
+                    <CheckBox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="3" ScaleY="3"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </CheckBox.RenderTransform>
+                </CheckBox>
+                <CheckBox Checked="CheckBox_Checked_3" Unchecked="CheckBox_Unchecked_3" Cursor="Arrow" Content="Seña" IsChecked="True" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="1208,1010,621,48" FontFamily="Moire Light" Width="91" Foreground="White" Background="Black" BorderBrush="White">
+                    <CheckBox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="3" ScaleY="3"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </CheckBox.RenderTransform>
+                </CheckBox>
+                <CheckBox Checked="CheckBox_Checked_4" Unchecked="CheckBox_Unchecked_4" Cursor="Arrow" Content="Posicion respectiva" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Width="157" Margin="1551,1012,212,45" FontFamily="Moire Light" Foreground="White" Background="Black" BorderBrush="White">
+                    <CheckBox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="3" ScaleY="3"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </CheckBox.RenderTransform>
+                </CheckBox>
+
+                <TextBlock x:Name="txtSignificado" Canvas.Left="366" TextWrapping="Wrap" Text="TextBlock" Canvas.Top="309" Height="89" Width="521" Visibility="Hidden"/>
             </Grid>
         </Viewbox>
-        <Canvas HorizontalAlignment="Left" Height="240" VerticalAlignment="Top" Width="1192" Margin="0,529,0,0"/>
-        <Canvas Name="arriba">
-            <TextBlock  Name="xPositionR" Text="x" Visibility="Hidden" FontSize="48"/>
-            <TextBlock Name="yPositionR" Text="y" Visibility="Hidden" FontSize="48" Canvas.Top="34"/>
-            <TextBlock Name="xPositionL" Text="x" Visibility="Hidden" FontSize="48" Canvas.Top="103"/>
-            <TextBlock Name="yPositionL" Text="y" Visibility="Hidden" FontSize="48" Canvas.Top="143"/>
-            <TextBlock  Background="White" Name="tblRightHandState" Visibility="Hidden" Text="derecha" Canvas.Left="958" Canvas.Top="143" FontSize="48"/>
-            <TextBlock Background="White" Name="tblLeftHandState" Visibility="Hidden" Text="Izquierda" Canvas.Left="958" Canvas.Top="244" FontSize="48"/>
-            <TextBlock Background="White" Name="tblPosicionMano" Visibility="Hidden" Text="Posicion" Canvas.Left="958" Canvas.Top="334" FontSize="48"/>
-            <TextBlock  Background="White" Name="tblResta" Visibility="Hidden" Text="Relativo" Canvas.Left="958" Canvas.Top="466" FontSize="48"/>
-            <TextBlock Background="White" Name="tblz" Visibility="Hidden" Text="z" Canvas.Left="958" Canvas.Top="535" FontSize="48"/>
-            <TextBlock Background="White" Name="tblsenaD" Visibility="Hidden" Text="Nada" FontSize="20" Canvas.Top="535" Canvas.Left="10"/>
-            <TextBlock Background="White" Name="tblsenaI" Visibility="Hidden" Text="Nada" FontSize="20" Canvas.Top="572" Canvas.Left="10"/>
-            <TextBlock Background="White" Name="zmano" Text="Nada" FontSize="20" Canvas.Top="444" Canvas.Left="10"/>
-            <TextBlock Background="White" Name="zcabeza" Text="Nada" FontSize="20" Canvas.Top="476" Canvas.Left="10"/>
-            <TextBlock Background="White" Name="tblgrabando" Text="" FontSize="20" Canvas.Top="244" Canvas.Left="10"/>
-            <TextBlock Name="tblsena" FontSize="36" Canvas.Top="614" Background="#FFF3E6E6" Width="1358" TextAlignment="Center" FontFamily="Global User Interface"/>
-            <Canvas Name="pera">
-            </Canvas>
-            <Menu x:Name="menu" Height="30" Canvas.Left="458" Canvas.Top="664" Width="468">
-                <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Cursor="Arrow" Content="Proporciones"/>
-                <CheckBox Checked="CheckBox_Checked_1" Unchecked="CheckBox_Unchecked_1" Cursor="Arrow" Content="Posiciones"/>
-                <CheckBox Checked="CheckBox_Checked_2" Unchecked="CheckBox_Unchecked_2" Cursor="Arrow" Content="Estados"/>
-                <CheckBox Checked="CheckBox_Checked_3" Unchecked="CheckBox_Unchecked_3" Cursor="Arrow" Content="Seña" IsChecked="True"/>
-                <CheckBox Checked="CheckBox_Checked_4" Unchecked="CheckBox_Unchecked_4" Cursor="Arrow" Content="Posicion respectiva"/>
 
-            </Menu>
-            <TextBlock x:Name="txtSignificado" Canvas.Left="366" TextWrapping="Wrap" Text="TextBlock" Canvas.Top="309" Height="89" Width="521" Visibility="Hidden"/>
-            <Button x:Name="btnSignificado" Content="Terminar" Canvas.Left="834" Canvas.Top="311" Width="119" Height="37" Visibility="Hidden"/>
-        </Canvas>
+
     </Grid>
 
 </Window>
