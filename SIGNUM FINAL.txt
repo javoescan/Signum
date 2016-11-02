@@ -1,2 +1,0 @@
-loading mientras se agrega seña
-armar oracion con señas por ej "hola, soy franco. este es mi proyecto..."

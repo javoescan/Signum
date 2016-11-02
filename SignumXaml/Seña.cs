@@ -15,10 +15,12 @@ namespace SignumXaml
         public  string senai;
         public  string significado;
         static Dictionary<ManoSeña, string> diccionario = new Dictionary<ManoSeña, string>() { };
+        static string fileName = "señas.json";
+        static string path = Path.Combine(Environment.CurrentDirectory, @"Data\", fileName);
         public static Dictionary<ManoSeña, string> CargarSeñas()
         {
-            string strFileName = @"D:\Signum proyecto\señas.json";
-            string strFileContent = File.ReadAllText(strFileName);
+            
+            string strFileContent = File.ReadAllText(path);
             JObject o1 = JObject.Parse(strFileContent);
             for (int i = 0; i < o1.GetValue("senasArray").Count(); i++)
             {
@@ -33,8 +35,7 @@ namespace SignumXaml
         public static void AgregarSeña(Seña nueva)
         {
                 List<Seña> data = new List<Seña>();
-                string strFileName = @"D:\Signum proyecto\señas.json";
-                string strFileContent = File.ReadAllText(strFileName);
+                string strFileContent = File.ReadAllText(path);
                 JObject o1 = JObject.Parse(strFileContent);
                 for (int i = 0; i < o1.GetValue("senasArray").Count(); i++)
                 {
@@ -49,7 +50,7 @@ namespace SignumXaml
             nuevalista.senasArray = new List<Seña>();
             nuevalista.senasArray=data;
                 string newJson = JsonConvert.SerializeObject(nuevalista);
-                File.WriteAllText(@"D:\Signum proyecto\señas.json", newJson);
+                File.WriteAllText(path, newJson);
             }
         }
     }
