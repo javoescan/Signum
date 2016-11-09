@@ -175,7 +175,7 @@
                         <SolidColorBrush Color="#FFA24848" Opacity="0"/>
                     </Rectangle.Stroke>
                 </Rectangle>
-                <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Cursor="Arrow" Content="Proporciones" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="222,1016,1586,42" FontFamily="Moire Light" Width="112" Foreground="White" Background="Black" BorderBrush="White">
+                <CheckBox Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked" Cursor="Arrow" Content="Proporciones" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="198,1016,1610,42" FontFamily="Moire Light" Width="112" Foreground="White" Background="Black" BorderBrush="White">
                     <CheckBox.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="3" ScaleY="3"/>
@@ -185,7 +185,7 @@
                         </TransformGroup>
                     </CheckBox.RenderTransform>
                 </CheckBox>
-                <CheckBox Checked="CheckBox_Checked_1" Unchecked="CheckBox_Unchecked_1" Cursor="Arrow" Content="Posiciones" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="862,1015,955,43" FontFamily="Moire Light" Width="103" Foreground="White" Background="Black" BorderBrush="White">
+                <CheckBox Checked="CheckBox_Checked_1" Unchecked="CheckBox_Unchecked_1" Cursor="Arrow" Content="Posiciones" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="767,1016,1050,42" FontFamily="Moire Light" Width="103" Foreground="White" Background="Black" BorderBrush="White">
                     <CheckBox.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="3" ScaleY="3"/>
@@ -195,7 +195,7 @@
                         </TransformGroup>
                     </CheckBox.RenderTransform>
                 </CheckBox>
-                <CheckBox Checked="CheckBox_Checked_2" Unchecked="CheckBox_Unchecked_2" Cursor="Arrow" Content="Estados" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="562,1017,1269,41" FontFamily="Moire Light" Width="89" Foreground="White" Background="Black" BorderBrush="White">
+                <CheckBox Checked="CheckBox_Checked_2" Unchecked="CheckBox_Unchecked_2" Cursor="Arrow" Content="Estados" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="506,1015,1325,43" FontFamily="Moire Light" Width="89" Foreground="White" Background="Black" BorderBrush="White">
                     <CheckBox.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="3" ScaleY="3"/>
@@ -205,7 +205,7 @@
                         </TransformGroup>
                     </CheckBox.RenderTransform>
                 </CheckBox>
-                <CheckBox Checked="CheckBox_Checked_3" Unchecked="CheckBox_Unchecked_3" Cursor="Arrow" Content="Seña" IsChecked="True" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="1208,1010,621,48" FontFamily="Moire Light" Width="91" Foreground="White" Background="Black" BorderBrush="White">
+                <CheckBox Checked="CheckBox_Checked_3" Unchecked="CheckBox_Unchecked_3" Cursor="Arrow" Content="Seña" IsChecked="True" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Margin="1038,1017,791,41" FontFamily="Moire Light" Width="91" Foreground="White" Background="Black" BorderBrush="White">
                     <CheckBox.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="3" ScaleY="3"/>
@@ -215,7 +215,17 @@
                         </TransformGroup>
                     </CheckBox.RenderTransform>
                 </CheckBox>
-                <CheckBox Checked="CheckBox_Checked_4" Unchecked="CheckBox_Unchecked_4" Cursor="Arrow" Content="Posicion respectiva" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Width="157" Margin="1551,1012,212,45" FontFamily="Moire Light" Foreground="White" Background="Black" BorderBrush="White">
+                <CheckBox Checked="CheckBox_Checked_5" Unchecked="CheckBox_Unchecked_5" Cursor="Arrow" Content="Sectores" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Width="157" Margin="1759,1018,4,39" FontFamily="Moire Light" Foreground="White" Background="Black" BorderBrush="White">
+                    <CheckBox.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform ScaleX="3" ScaleY="3"/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </CheckBox.RenderTransform>
+                </CheckBox>
+                <CheckBox Checked="CheckBox_Checked_4" Unchecked="CheckBox_Unchecked_4" Cursor="Arrow" Content="Posicion respectiva" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Width="157" Margin="1300,1017,463,40" FontFamily="Moire Light" Foreground="White" Background="Black" BorderBrush="White">
                     <CheckBox.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="3" ScaleY="3"/>

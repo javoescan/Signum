@@ -37,6 +37,7 @@ namespace SignumXaml
         int numo;
         bool grabando = false;
         bool comenzargrabado = false;
+        bool sectoresVisibles = false;
         List<int> SectoresRecorridosD = new List<int>();
         List<int> SectoresRecorridosI = new List<int>();
 
@@ -289,6 +290,7 @@ namespace SignumXaml
             tempSeñaMD = "";
             tempSeñaMI = "";
             contSeñaTemp = 0;
+            sectoresVisibles = false;
         }
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
@@ -336,6 +338,19 @@ namespace SignumXaml
                                 tblResta.Text = ((head.Position.Y * 100 - 20) - (handRight.Position.Y * 100)).ToString();
                                 tblz.Text = panza.Position.Z.ToString();
 
+                                if (sectoresVisibles)
+                                {
+                                    foreach (Rectangle item in SectoresRecs)
+                                {
+                                    if (item != null)
+                                    {
+                                        
+                                            item.StrokeThickness = 1;
+                                        
+                                        
+                                    }
+                                }
+                                }
                                 if (!grabando && body.HandRightState == HandState.Closed && body.HandLeftState == HandState.Closed)
                                 {
                                     grabando = true;
@@ -351,10 +366,9 @@ namespace SignumXaml
                                     {
                                         comenzargrabado = true;
                                     }
-                                    foreach (Rectangle item in SectoresRecs)
-                                    {
-                                        item.StrokeThickness = 1;
-                                    }
+                                    
+                                    sectoresVisibles = true;
+
                                     if (comenzargrabado && body.HandRightState == HandState.Closed && body.HandLeftState == HandState.Closed)
                                     {
                                         grabando = false;
@@ -632,6 +646,15 @@ namespace SignumXaml
         private void CheckBox_Unchecked_4(object sender, RoutedEventArgs e)
         {
             tblPosicionMano.Visibility = Visibility.Hidden;
+        }
+        private void CheckBox_Checked_5(object sender, RoutedEventArgs e)
+        {
+            sectoresVisibles = true;
+        }
+
+        private void CheckBox_Unchecked_5(object sender, RoutedEventArgs e)
+        {
+            sectoresVisibles = false;
         }
     }
 

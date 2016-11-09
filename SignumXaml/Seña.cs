@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace SignumXaml
         public  string significado;
         static Dictionary<ManoSeña, string> diccionario = new Dictionary<ManoSeña, string>() { };
         static string fileName = "señas.json";
-        static string path = Path.Combine(Environment.CurrentDirectory, @"Data\", fileName);
+        static string path = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName) + "//"+fileName;
         public static Dictionary<ManoSeña, string> CargarSeñas()
         {
             

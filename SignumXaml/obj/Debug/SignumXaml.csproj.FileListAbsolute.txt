@@ -81,12 +81,6 @@ D:\Signum proyecto\SignumXaml\obj\Debug\SignumXaml.exe
 D:\Signum proyecto\SignumXaml\obj\Debug\SignumXaml.pdb
 D:\Signum proyecto\SignumXaml\bin\Debug\SignumXaml.exe
 D:\Signum proyecto\SignumXaml\bin\Debug\SignumXaml.pdb
-D:\Signum proyecto\SignumXaml\bin\Debug\Microsoft.Kinect.dll
-D:\Signum proyecto\SignumXaml\bin\Debug\Microsoft.Kinect.Face.dll
-D:\Signum proyecto\SignumXaml\bin\Debug\Microsoft.Kinect.Fusion.dll
-D:\Signum proyecto\SignumXaml\bin\Debug\Microsoft.Kinect.Tools.dll
-D:\Signum proyecto\SignumXaml\bin\Debug\Microsoft.Kinect.VisualGestureBuilder.dll
-D:\Signum proyecto\SignumXaml\bin\Debug\Microsoft.Kinect.Wpf.Controls.dll
 D:\Signum proyecto\SignumXaml\bin\Debug\Microsoft.Kinect.xml
 D:\Signum proyecto\SignumXaml\bin\Debug\Microsoft.Kinect.Face.xml
 D:\Signum proyecto\SignumXaml\bin\Debug\Microsoft.Kinect.Fusion.xml
@@ -162,3 +156,11 @@ D:\Signum proyecto\SignumXaml\bin\Debug\Newtonsoft.Json.dll
 D:\Signum proyecto\SignumXaml\bin\Debug\Newtonsoft.Json.xml
 D:\Signum proyecto\SignumXaml\obj\Debug\Significado.g.cs
 D:\Signum proyecto\SignumXaml\obj\Debug\Significado.baml
+E:\Proyecto final\Signum proyecto\SignumXaml\bin\Debug\SignumXaml.exe.config
+E:\Proyecto final\Signum proyecto\SignumXaml\obj\Debug\SignumXaml.exe
+E:\Proyecto final\Signum proyecto\SignumXaml\obj\Debug\SignumXaml.pdb
+D:\Signum proyecto\SignumXaml\bin\Debug\SignumXaml.exe.manifest
+D:\Signum proyecto\SignumXaml\bin\Debug\SignumXaml.application
+D:\Signum proyecto\SignumXaml\obj\Debug\SignumXaml.exe.manifest
+D:\Signum proyecto\SignumXaml\obj\Debug\SignumXaml.application
+D:\Signum proyecto\SignumXaml\obj\Debug\SignumXaml_Content.g.cs
