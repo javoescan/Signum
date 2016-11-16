@@ -291,6 +291,7 @@ namespace SignumXaml
             tempSeñaMI = "";
             contSeñaTemp = 0;
             sectoresVisibles = false;
+            sectoresChk.IsChecked = false;
         }
         void Reader_MultiSourceFrameArrived(object sender, MultiSourceFrameArrivedEventArgs e)
         {
@@ -375,41 +376,47 @@ namespace SignumXaml
                                         comenzargrabado = false;
                                         if (SectoresRecorridosD.Count > 0)
                                         {
-                                            var dialog = new Significado();
-                                            if (dialog.ShowDialog() == true)
-                                            {
-                                                if (dialog.ResponseText == "")
+                                                var dialog = new Significado();
+
+                                                
+                                                while (dialog.ShowDialog() == true && dialog.ResponseText == "")
                                                 {
+                                                    
                                                     MessageBox.Show("Debe escribir significado");
+                                                    dialog = new Significado();
+                                                }
+
+                                            if (dialog.ResponseText != null && dialog.ResponseText != "")
+                                            {
+
+
+                                                Seña nueva = new Seña();
+                                                ActualizarSeñasTemporales(SectoresRecorridosD);
+                                                nueva.senad = tempderecha;
+                                                if (SectoresRecorridosI.Count > 0)
+                                                {
+                                                    ActualizarSeñasTemporales(SectoresRecorridosI, false);
+                                                    nueva.senai = tempizquierda;
                                                 }
                                                 else
                                                 {
-                                                    Seña nueva = new Seña();
-                                                    ActualizarSeñasTemporales(SectoresRecorridosD);
-                                                    nueva.senad = tempderecha;
-                                                    if (SectoresRecorridosI.Count > 0)
-                                                    {
-                                                        ActualizarSeñasTemporales(SectoresRecorridosI, false);
-                                                        nueva.senai = tempizquierda;
-                                                    }
-                                                    else
-                                                    {
-                                                        nueva.senai = "";
-                                                    }
-                                                    nueva.significado = dialog.ResponseText;
-                                                    Seña.AgregarSeña(nueva);
-                                                    diccionario.Clear();
-                                                    TraerSeñas();
-                                                    tempizquierda = "";
-                                                    tempderecha = "";
-                                                    SectoresRecorridosD.Clear();
-                                                    SectoresRecorridosI.Clear();
-                                                    tblgrabando.Text = "";
-
-                                                    Analisis.lpDerecha.listaSiguiente = Analisis.lpDerecha.raiz;
-                                                    Analisis.lpIzquierda.listaSiguiente = Analisis.lpIzquierda.raiz;
+                                                    nueva.senai = "";
                                                 }
-                                            }
+                                                nueva.significado = dialog.ResponseText;
+                                                Seña.AgregarSeña(nueva);
+                                                diccionario.Clear();
+                                                TraerSeñas();
+                                                tempizquierda = "";
+                                                tempderecha = "";
+                                                SectoresRecorridosD.Clear();
+                                                SectoresRecorridosI.Clear();
+                                                tblgrabando.Text = "";
+
+                                                Analisis.lpDerecha.listaSiguiente = Analisis.lpDerecha.raiz;
+                                                Analisis.lpIzquierda.listaSiguiente = Analisis.lpIzquierda.raiz;
+                                                ReinciarParametrosDeDeteccion();
+                                                }
+                                            
                                             else
                                             {
                                                 ReinciarParametrosDeDeteccion();

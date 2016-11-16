@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Significado" Height="300" Width="300">
     <StackPanel Margin="0,0,0,200">
-        <TextBlock Text="Enter some text" />
+        <TextBlock Text="Ingrese el significado de la seña" />
         <TextBox x:Name="ResponseTextBox" />
         <Button Content="OK" Click="OKButton_Click" />
     </StackPanel>

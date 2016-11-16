@@ -215,7 +215,7 @@
                         </TransformGroup>
                     </CheckBox.RenderTransform>
                 </CheckBox>
-                <CheckBox Checked="CheckBox_Checked_5" Unchecked="CheckBox_Unchecked_5" Cursor="Arrow" Content="Sectores" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Width="157" Margin="1759,1018,4,39" FontFamily="Moire Light" Foreground="White" Background="Black" BorderBrush="White">
+                <CheckBox Name="sectoresChk" Checked="CheckBox_Checked_5" Unchecked="CheckBox_Unchecked_5" Cursor="Arrow" Content="Sectores" RenderTransformOrigin="0.5,0.5" HorizontalAlignment="Center" Width="157" Margin="1759,1018,4,39" FontFamily="Moire Light" Foreground="White" Background="Black" BorderBrush="White">
                     <CheckBox.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform ScaleX="3" ScaleY="3"/>
